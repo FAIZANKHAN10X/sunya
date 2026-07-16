@@ -1,0 +1,267 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --muted: #737373;
+  --border: #e5e5e5;
+  --surface: #f5f5f5;
+  --radius-soft: 0.75rem;
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-menu: 520ms;
+  --duration-load: 700ms;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #fafafa;
+  --muted: #a3a3a3;
+  --border: #262626;
+  --surface: #0a0a0a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-surface: var(--surface);
+  --radius-soft: var(--radius-soft);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* —— Loading screen —— */
+
+@keyframes sunya-load-mark {
+  from {
+    opacity: 0;
+    letter-spacing: 0.55em;
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 0.38em;
+  }
+}
+
+@keyframes sunya-load-line {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes sunya-load-caption {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.loading-screen {
+  transition:
+    opacity var(--duration-load) var(--ease-premium),
+    visibility var(--duration-load) var(--ease-premium);
+}
+
+.loading-screen[data-state="exiting"] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loading-screen__mark {
+  animation: sunya-load-mark 900ms var(--ease-premium) both;
+}
+
+.loading-screen__track {
+  overflow: hidden;
+}
+
+.loading-screen__line {
+  transform-origin: left center;
+  animation: sunya-load-line 1.35s var(--ease-premium) both;
+}
+
+.loading-screen__caption {
+  animation: sunya-load-caption 700ms var(--ease-premium) 250ms both;
+}
+
+/* —— Morph menu —— */
+
+.morph-menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--background);
+  transform-origin: top right;
+  transition:
+    width var(--duration-menu) var(--ease-premium),
+    height var(--duration-menu) var(--ease-premium),
+    border-radius var(--duration-menu) var(--ease-premium),
+    box-shadow var(--duration-menu) var(--ease-premium),
+    background-color var(--duration-menu) var(--ease-premium);
+  will-change: width, height, border-radius;
+}
+
+.morph-menu[data-open="false"] {
+  width: 5.25rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  box-shadow: none;
+}
+
+.morph-menu[data-open="true"] {
+  width: min(20rem, calc(100vw - 2rem));
+  height: 22.5rem;
+  border-radius: 1.5rem;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--border) 60%, transparent),
+    0 24px 48px -24px color-mix(in srgb, var(--foreground) 18%, transparent);
+}
+
+@media (min-width: 640px) {
+  .morph-menu[data-open="true"] {
+    width: 21rem;
+    height: 23.5rem;
+  }
+}
+
+.morph-menu__chrome {
+  display: flex;
+  height: 2.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 0.25rem;
+  transition: justify-content var(--duration-menu) var(--ease-premium);
+}
+
+.morph-menu[data-open="true"] .morph-menu__chrome {
+  justify-content: flex-end;
+  padding-inline: 0.75rem;
+}
+
+.morph-menu__toggle {
+  display: inline-flex;
+  min-width: 4.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--foreground);
+}
+
+.morph-menu__panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0.25rem 1.5rem 1.5rem;
+  opacity: 0;
+  transform: translateY(0.5rem) scale(0.98);
+  transform-origin: top right;
+  pointer-events: none;
+  transition:
+    opacity 280ms var(--ease-premium),
+    transform 280ms var(--ease-premium);
+}
+
+.morph-menu[data-open="true"] .morph-menu__panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  transition-delay: 140ms;
+}
+
+.morph-menu[data-open="false"] .morph-menu__panel {
+  transition-delay: 0ms;
+  transition-duration: 160ms;
+}
+
+.morph-menu__item {
+  width: 100%;
+  padding-block: 0.85rem;
+  text-align: left;
+  font-size: 1.0625rem;
+  letter-spacing: 0.02em;
+  color: var(--foreground);
+  opacity: 0;
+  transform: translateX(0.4rem);
+  transition:
+    opacity 320ms var(--ease-premium),
+    transform 320ms var(--ease-premium);
+}
+
+.morph-menu[data-open="true"] .morph-menu__item {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.morph-menu[data-open="true"] .morph-menu__item:nth-child(1) {
+  transition-delay: 160ms;
+}
+.morph-menu[data-open="true"] .morph-menu__item:nth-child(2) {
+  transition-delay: 200ms;
+}
+.morph-menu[data-open="true"] .morph-menu__item:nth-child(3) {
+  transition-delay: 240ms;
+}
+.morph-menu[data-open="true"] .morph-menu__item:nth-child(4) {
+  transition-delay: 280ms;
+}
+.morph-menu[data-open="true"] .morph-menu__item:nth-child(5) {
+  transition-delay: 320ms;
+}
+
+.morph-menu[data-open="false"] .morph-menu__item {
+  transition-delay: 0ms;
+  transition-duration: 120ms;
+}
+
+.morph-menu__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-screen,
+  .loading-screen__mark,
+  .loading-screen__line,
+  .loading-screen__caption,
+  .morph-menu,
+  .morph-menu__chrome,
+  .morph-menu__panel,
+  .morph-menu__item {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .morph-menu[data-open="true"] .morph-menu__panel,
+  .morph-menu[data-open="true"] .morph-menu__item {
+    opacity: 1;
+    transform: none;
+  }
+}

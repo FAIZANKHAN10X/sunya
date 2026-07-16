@@ -9,11 +9,10 @@ Sunya is a calm, content-led yoga brand website. This repository builds a produc
 The site currently delivers:
 
 - A simple full-viewport loading screen
-- A refined sticky header with theme control and a polished, inactive menu
-- Seven data-driven sections with believable placeholder content and layout variety
+- A refined sticky header with a polished, inactive menu
+- Seven modular sections with believable placeholder content and layout variety
 - A minimal professional footer
-- A restrained visual system (spacing, type scale, surfaces, borders, theme tokens)
-- Light / dark / system theme support
+- A restrained visual system (spacing, type scale, surfaces, borders, design tokens)
 - TypeScript, Next.js App Router, and Tailwind CSS v4 structure
 - Root-level documentation aligned with the implementation
 
@@ -55,9 +54,9 @@ Sunya will continue evolving into a premium yoga website covering practice, phil
 
 Application code lives under `src/` so configuration files stay at the project root and source code remains clearly separated.
 
-### Data-driven sections
+### Modular sections
 
-Section content lives in `src/data/sections.ts` as a typed discriminated union (`variant` field). A single `Section` component dispatches layout by variant. Adding or replacing content does not require seven separate section components.
+Each homepage section is a self-contained component under `src/components/sections/` (content and layout together). `page.tsx` stacks them in order. Edit one section file without touching the others.
 
 ### Shared UI primitives
 
@@ -66,8 +65,7 @@ Reusable presentational pieces (`Container`, `Button`, `Card`, `SectionLabel`) k
 ### Isolated interactive shells
 
 - `LoadingScreen` owns simulated load timing and reveal behavior.
-- `Header` owns menu open/close state (including Escape to close) and composes `MobileMenu`.
-- `ThemeProvider` owns light / dark / system preference.
+- `NavigationProvider` owns the GSAP split-screen menu timeline.
 - Menu items and CTAs are presentation-only—no routing or form submission.
 
 ### Layout model

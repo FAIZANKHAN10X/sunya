@@ -26,17 +26,24 @@ sunya/
     │   ├── Footer.tsx
     │   ├── Header.tsx
     │   ├── LoadingScreen.tsx
-    │   ├── MobileMenu.tsx
-    │   ├── Section.tsx
+    │   ├── MenuButton.tsx
+    │   ├── NavigationContext.tsx
+    │   ├── NavigationPanel.tsx
     │   ├── SectionLabel.tsx
     │   ├── SectionShell.tsx
-    │   ├── ThemeProvider.tsx
-    │   └── ThemeToggle.tsx
+    │   ├── SiteShell.tsx
+    │   └── sections/
+    │       ├── index.ts
+    │       ├── SectionIntro.tsx
+    │       ├── HeroSection.tsx
+    │       ├── PhilosophySection.tsx
+    │       ├── PracticeSection.tsx
+    │       ├── BenefitsSection.tsx
+    │       ├── JourneySection.tsx
+    │       ├── CommunitySection.tsx
+    │       └── ContactSection.tsx
     ├── data/
-    │   ├── menu.ts
-    │   └── sections.ts
-    ├── lib/
-    │   └── theme.ts
+    │   └── menu.ts
     └── types/
         └── index.ts
 ```
@@ -44,66 +51,75 @@ sunya/
 ## Component Hierarchy
 
 ```text
-ThemeProvider
-└── LoadingScreen
-    ├── Header
-    │   ├── ThemeToggle
-    │   └── MobileMenu
-    ├── main
-    │   └── Section (×7, from data; layout by variant)
-    └── Footer
+LoadingScreen
+└── SiteShell / NavigationProvider
+    ├── Header (fixed to viewport)
+    │   └── MenuButton  ← single control: Menu ≡ ⇄ Close ×
+    ├── page surface (GSAP: x + border-radius)
+    │   ├── main (vertical stack in page.tsx)
+    │   │   ├── HeroSection
+    │   │   ├── PhilosophySection
+    │   │   ├── PracticeSection
+    │   │   ├── BenefitsSection
+    │   │   ├── JourneySection
+    │   │   ├── CommunitySection
+    │   │   └── ContactSection
+    │   └── Footer
+    └── NavigationPanel (GSAP: x from right)
+        ├── Primary links
+        └── Socials / Quick Links
 ```
 
 ### Component roles
 
 | Component | Responsibility |
 | --- | --- |
-| `ThemeProvider` | Theme state (`light` / `dark` / `system`), persistence, and DOM class application |
-| `ThemeToggle` | Header control to choose light, dark, or system theme |
 | `LoadingScreen` | Premium full-viewport brand loader with mark, line, and fade exit |
-| `Header` | Sticky top bar with brand mark, theme control, and morph menu |
-| `MobileMenu` | Right-anchored morph menu expanding from the Menu button; Escape / backdrop close |
+| `SiteShell` | Page + panel shell; split-screen layout structure |
+| `NavigationProvider` | Master GSAP timeline (`play` / `reverse`) for page, panel, and control crossfade |
+| `Header` | Fixed global chrome — logo + single nav control (never moves) |
+| `MenuButton` | One control: `Menu ≡` ⇄ `Close ×` via GSAP crossfade in the same position |
+| `NavigationPanel` | Full-height right surface; no close control inside the panel |
 | `Container` | Shared horizontal padding and wide max-width constraints |
 | `Button` | Primary / secondary presentational buttons (no navigation) |
 | `Card` | Soft surface block with border and radius |
 | `SectionLabel` | Small uppercase section eyebrow label |
 | `SectionShell` | Shared full-viewport (`min-h-svh`) panel shell for every section |
-| `Section` | Data-driven section renderer; switches layout by `variant` |
+| `sections/*Section` | One self-contained homepage section (content + layout in the same file) |
+| `SectionIntro` | Shared section label + heading + description block |
 | `Footer` | Brand mark, short description, and copyright |
 
 ## Data Flow
 
-1. `src/data/sections.ts` exports an array of section objects typed as `Section`.
-2. Each section includes a `variant` that determines layout (`hero`, `features`, `cards`, `steps`, `split`, `contact`).
-3. `src/app/page.tsx` maps the array to `<Section />`.
-4. `src/data/menu.ts` exports placeholder menu labels typed as `MenuItem`.
-5. `MobileMenu` reads menu data and renders disabled buttons—no routing.
+1. Each section component owns its own content and layout under `src/components/sections/`.
+2. `src/app/page.tsx` stacks the seven section components in order inside `<main>`.
+3. `src/data/menu.ts` exports placeholder menu labels typed as `MenuItem`.
 
 ```text
-sections.ts  →  page.tsx  →  Section (variant switch)
-menu.ts      →  MobileMenu
-types/index.ts  ← shared types for section, menu, and theme data
+page.tsx  →  sections/*Section.tsx  (self-contained)
+menu.ts   →  NavigationPanel
+types/index.ts  ← menu types
 ```
 
-## Section Generation Approach
+## Section Composition
 
-Sections are **not** seven hardcoded top-level components.
+Stack order is explicit in `page.tsx`. Each section is modular and self-contained.
 
-| Order | ID | Variant | Purpose |
-| --- | --- | --- | --- |
-| 1 | `hero` | `hero` | Welcome / brand introduction |
-| 2 | `philosophy` | `features` | Principles grid |
-| 3 | `practice` | `cards` | Practice offerings |
-| 4 | `benefits` | `features` | Benefits grid |
-| 5 | `journey` | `steps` | Numbered path |
-| 6 | `community` | `split` | Intro + stacked cards |
-| 7 | `contact` | `contact` | Details + CTA |
+| Order | Component file | Purpose |
+| --- | --- | --- |
+| 1 | `HeroSection.tsx` | Welcome / brand introduction |
+| 2 | `PhilosophySection.tsx` | Principles grid |
+| 3 | `PracticeSection.tsx` | Practice offerings |
+| 4 | `BenefitsSection.tsx` | Benefits grid |
+| 5 | `JourneySection.tsx` | Numbered path |
+| 6 | `CommunitySection.tsx` | Intro + stacked cards |
+| 7 | `ContactSection.tsx` | Details + CTA |
 
-- Content source: `src/data/sections.ts`
-- Presentational dispatcher: `src/components/Section.tsx`
-- Composition: `page.tsx` maps `sections` to `Section` instances
-
-To change copy later, edit the data file. To change a layout pattern, edit the matching branch in `Section.tsx`.
+| Goal | Edit |
+| --- | --- |
+| Change one section’s copy or layout | matching file under `sections/` |
+| Reorder homepage | order of components in `page.tsx` |
+| Add a section | new file under `sections/` + import in `page.tsx` |
 
 ## Design System (tokens)
 
@@ -111,7 +127,7 @@ Defined in `src/app/globals.css`:
 
 | Token | Role |
 | --- | --- |
-| `background` | Page background (`#ffffff` light / `#000000` dark) |
+| `background` | Page background (`#000000`, dark-only) |
 | `foreground` | Primary text / solid controls |
 | `muted` | Secondary text |
 | `border` | Card outlines and control borders (not section dividers) |
@@ -123,14 +139,7 @@ Shared layout system:
 - Default container: `max-w-[90rem]` with `px-6` / `sm:px-10` / `lg:px-14`
 - Every homepage section uses `SectionShell` → `min-h-svh` full-viewport panels
 - Section separation is spacing and composition only—no horizontal rules between sections
-- Layout variety by variant: asymmetric hero, intro + grids, split columns, contact split
-
-## Theme
-
-- Preference stored in `localStorage` under `sunya-theme`
-- Values: `light`, `dark`, `system` (default)
-- Resolved dark mode applies the `dark` class on `<html>`
-- An inline init script in `layout.tsx` prevents a flash of the wrong theme on load
+- Layout variety: asymmetric hero, intro + grids, split columns, contact split
 
 ## Routing
 

@@ -1,19 +1,29 @@
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import LoadingScreen from "@/components/LoadingScreen";
-import Section from "@/components/Section";
-import { sections } from "@/data/sections";
+import BenefitsSection from "@/components/sections/BenefitsSection";
+import CommunitySection from "@/components/sections/CommunitySection";
+import ContactSection from "@/components/sections/ContactSection";
+import HeroSection from "@/components/sections/HeroSection";
+import JourneySection from "@/components/sections/JourneySection";
+import PhilosophySection from "@/components/sections/PhilosophySection";
+import PracticeSection from "@/components/sections/PracticeSection";
+import SiteShell from "@/components/SiteShell";
 
 export default function Home() {
   return (
     <LoadingScreen>
-      <Header />
-      <main>
-        {sections.map((section) => (
-          <Section key={section.id} section={section} />
-        ))}
-      </main>
-      <Footer />
+      <SiteShell>
+        <main>
+          <HeroSection />
+          <PhilosophySection />
+          <PracticeSection />
+          <BenefitsSection />
+          <JourneySection />
+          <CommunitySection />
+          <ContactSection />
+        </main>
+        <Footer />
+      </SiteShell>
     </LoadingScreen>
   );
 }

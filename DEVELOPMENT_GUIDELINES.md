@@ -3,10 +3,10 @@
 ## Naming Conventions
 
 - **Components**: PascalCase filenames and exports (`Header.tsx`, `export default function Header`).
-- **Data modules**: camelCase filenames (`sections.ts`, `menu.ts`).
-- **Types**: PascalCase type names (`Section`, `MenuItem`, `ContentItem`).
+- **Data modules**: camelCase filenames (`menu.ts`).
+- **Types**: PascalCase type names (`MenuItem`).
 - **IDs and keys**: kebab-case or short stable strings (`hero`, `philosophy`, `home`).
-- **Section variants**: lowercase string literals (`hero`, `features`, `cards`, `steps`, `split`, `contact`).
+- **Section components**: PascalCase under `src/components/sections/` (`HeroSection.tsx`).
 - **CSS / Tailwind**: utility classes in source; shared tokens in `globals.css`.
 
 ## Component Standards
@@ -25,7 +25,6 @@
 - Strict mode remains enabled in `tsconfig.json`.
 - Share domain types from `src/types`.
 - Prefer `type` aliases for simple object shapes used across modules.
-- Use discriminated unions for section data (`variant` field) so layouts narrow safely.
 - Import types with `import type` when importing only types.
 - Path alias: `@/*` maps to `src/*`.
 
@@ -34,6 +33,7 @@
 - Use Tailwind CSS v4 via `@import "tailwindcss"` in `globals.css`.
 - Prefer utility classes in JSX over custom CSS.
 - Use semantic color tokens (`background`, `foreground`, `muted`, `border`, `surface`) rather than hard-coded neutrals.
+- Dark-only palette (black background); no theme toggle.
 - Mobile-first: base styles for small screens, then `sm:` / larger breakpoints as needed.
 - Spacing and type scales should feel deliberate and reusable—avoid arbitrary one-off values when a shared pattern exists.
 - Shared radius: `rounded-soft`.
@@ -42,10 +42,10 @@
 
 ## Content & Section Standards
 
-- All seven homepage sections are generated from `src/data/sections.ts`.
-- Do not create seven separate top-level section components for the homepage.
-- New layout patterns should be added as a new `variant` (types + data + `Section` branch), not as page-level duplication.
-- Placeholder copy should remain believable and easy to replace.
+- Each homepage section is a self-contained component under `src/components/sections/`.
+- Content lives with its section component (not a shared `sections.ts` data file).
+- Stack order is explicit in `src/app/page.tsx`.
+- Prefer editing one section file when changing that section’s copy or layout.
 - Preserve heading hierarchy: one `h1` in the hero, section `h2`s, item `h3`s.
 
 ## Accessibility Standards

@@ -9,7 +9,6 @@
 - Seven data-driven full-viewport sections
 - Minimal footer
 - TypeScript strict mode and Tailwind CSS v4
-- Theme support (light / dark / system)
 - Root documentation (overview, structure, guidelines, roadmap)
 
 ## Phase 2 — Content Development
@@ -19,7 +18,7 @@
 - Believable placeholder copy across all seven sections
 - Clear information architecture: Hero, Philosophy, Practice, Benefits, Journey, Community, Contact
 - Accessible heading hierarchy and semantic section structure
-- Typed content model ready for future real copy or CMS migration
+- Modular self-contained section components (no shared sections data file)
 
 ## Phase 3 — Visual Design
 

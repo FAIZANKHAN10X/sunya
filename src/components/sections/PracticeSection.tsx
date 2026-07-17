@@ -1,48 +1,57 @@
-import Card from "@/components/Card";
 import SectionIntro from "@/components/sections/SectionIntro";
 import SectionShell from "@/components/SectionShell";
 
 const items = [
   {
     title: "Morning flow",
+    meta: "Soft · 45 min",
     description:
-      "Gentle sequencing to wake the body, clear the mind, and set a quiet tone for the hours ahead.",
+      "Easy sequencing to wake the body and set a quieter tone for the day—nothing to achieve before breakfast.",
   },
   {
     title: "Restorative stillness",
+    meta: "Supported · 60 min",
     description:
-      "Supported postures, longer holds, and soft guidance for recovery and deep nervous-system ease.",
+      "Longer holds, props, and soft guidance. Built for recovery days when effort should be almost optional.",
   },
   {
     title: "Breath & meditation",
+    meta: "Seated · 30 min",
     description:
-      "Seated and reclined practices that refine attention through simple, sustainable techniques.",
+      "Simple techniques, unhurried pacing. A short practice for when the mat feels like too much and sitting is enough.",
   },
 ] as const;
 
 export default function PracticeSection() {
   return (
     <SectionShell id="practice" labelledBy="practice-heading">
-      <div className="grid w-full gap-14 lg:grid-cols-12 lg:items-start lg:gap-16">
+      <div className="w-full">
         <SectionIntro
           id="practice-heading"
           label="Practice"
           heading="A practice that meets you where you are"
-          description="Choose the rhythm that fits your day. Each offering balances structure with spaciousness so you can practice with intention—not obligation."
-          className="lg:col-span-4"
-          descriptionClassName="max-w-md"
+          description="Pick the rhythm that fits the day. Structure when you need it, space when you don’t—intention over obligation."
+          className="max-w-2xl"
+          descriptionClassName="max-w-xl"
         />
-        <ul className="grid gap-5 sm:grid-cols-2 lg:col-span-8 lg:grid-cols-1 xl:grid-cols-3">
+
+        <ul className="mt-14 border-t border-border sm:mt-16">
           {items.map((item) => (
-            <li key={item.title}>
-              <Card className="h-full p-7 sm:p-8">
+            <li
+              key={item.title}
+              className="border-b border-border py-9 sm:py-10"
+            >
+              <article className="flex flex-col gap-3 sm:flex-row sm:items-baseline sm:justify-between sm:gap-10">
                 <h3 className="text-lg font-medium tracking-tight text-foreground sm:text-xl">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-                  {item.description}
+                <p className="shrink-0 text-xs font-medium tracking-[0.18em] text-muted uppercase">
+                  {item.meta}
                 </p>
-              </Card>
+              </article>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:mt-4 sm:text-base">
+                {item.description}
+              </p>
             </li>
           ))}
         </ul>

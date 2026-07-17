@@ -59,7 +59,7 @@ page.tsx
           │      ├── page surface (slides when menu open)
           │      │      ├── HeroSection → VideoBackground, Container, HeroScrollHint
           │      │      ├── PhilosophySection → SectionShell → Container, SectionIntro
-          │      │      ├── PracticeSection   → …, Card × N
+          │      │      ├── PracticeSection   → SectionShell, SectionIntro, offering list
           │      │      ├── BenefitsSection   → …
           │      │      ├── JourneySection    → …
           │      │      ├── CommunitySection  → …, Card × N
@@ -91,7 +91,7 @@ page.tsx
 | `Container` | Max-width + gutters | SectionShell, HeroSection, Footer | Yes |
 | `SectionLabel` | Uppercase kicker | SectionIntro | Yes (via intro) |
 | `Button` | Primary/secondary button | ContactSection only | Designed shared, 1 consumer |
-| `Card` | Bordered surface | Practice, Community | Yes |
+| `Card` | Bordered surface | Community only | Designed shared, 1 consumer |
 | `Footer` | Footer brand + copyright | `page.tsx` | No |
 | `SectionIntro` | Label + h2 + description | 6 content sections | Yes |
 | `sections/index.ts` | Barrel re-exports | Nobody (currently) | Dead weight until resolved |

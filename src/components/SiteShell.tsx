@@ -24,9 +24,6 @@ function SiteShellInner({ children }: SiteShellProps) {
         ref={pageRef}
         className="relative z-10 min-h-svh overflow-hidden bg-background will-change-transform"
       >
-        {/* Top padding so content clears the fixed header */}
-        <div className="h-16 sm:h-20" aria-hidden="true" />
-
         {isOpen ? (
           <button
             type="button"

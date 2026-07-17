@@ -9,7 +9,7 @@
 - Seven data-driven full-viewport sections
 - Minimal footer
 - TypeScript strict mode and Tailwind CSS v4
-- Root documentation (overview, structure, guidelines, roadmap)
+- Root documentation (README, ARCHITECTURE, CONTRIBUTING, ROADMAP, AGENTS)
 
 ## Phase 2 — Content Development
 

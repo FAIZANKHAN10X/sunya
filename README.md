@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sunya
 
-## Getting Started
+Sunya is a calm, content-led yoga brand marketing site. This repository is a deliberately minimal Next.js foundation: intentional structure, typography, and layout—not a flashy or animation-library-heavy experience.
 
-First, run the development server:
+## Current scope
+
+Implemented today (from actual source):
+
+- Full-viewport loading screen
+- Fixed header with working open/close menu (CSS transitions, Escape-to-close, scroll lock)
+- Right navigation panel with presentation-only links (no live routes)
+- Homepage sections: Hero (video background), Philosophy, Practice, Benefits, Journey, Community, Contact
+- Minimal footer
+- Restrained design tokens in `src/app/globals.css`
+- TypeScript (strict), Next.js App Router, Tailwind CSS v4
+
+### Out of scope (for now)
+
+- Multi-page routing and real menu destinations
+- Forms, booking, or backend integrations
+- Animation / scroll libraries (GSAP, Framer Motion, Lenis, etc.)
+- CMS integration
+- Heavy decoration (gradients, large effect systems)
+
+## Stack
+
+| Layer | Choice |
+| --- | --- |
+| Framework | Next.js (App Router) |
+| UI | React |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Package manager | npm |
+
+Runtime dependencies are only `next`, `react`, and `react-dom`.
+
+## Commands
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # development server
+npm run lint
+npm run build
+npm run start    # production server after build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Source map
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+src/
+├── app/                 # layout, homepage, globals.css
+├── components/          # shell, nav, shared UI, sections/
+├── data/                # menu labels (menu.ts)
+└── types/               # shared types (MenuItem)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Single route: `/` via `src/app/page.tsx`.
 
-## Learn More
+## Documentation
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Doc | Role |
+| --- | --- |
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | Structure, dependency flow, component roles |
+| [CONTRIBUTING.md](./CONTRIBUTING.md) | Conventions and contribution rules |
+| [ROADMAP.md](./ROADMAP.md) | Phased product roadmap |
+| [AGENTS.md](./AGENTS.md) | Guidance for automated coding agents |

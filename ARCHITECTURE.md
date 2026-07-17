@@ -1,19 +1,27 @@
 # Architecture — Sunya
 
-Reference doc. Keep this in sync: any PR that adds/removes/moves a file under
-`src/` should update the relevant section here in the same PR.
+Reference doc. Keep this in sync: any change that adds, removes, or moves a
+file under `src/`, or changes which component is shared, should update this
+document in the same change.
+
+New shared context, shared hooks, `hooks/` / `lib/` folders, or external
+libraries require an **explicit architectural decision**—not incidental
+addition.
 
 ## Stack
 
-Next.js + React only. No state library, no CSS-in-JS library, no `hooks/`,
-no `lib/`. If one of those shows up, this doc (and the reasoning below) needs
-to be revisited on purpose, not by accretion.
+Next.js App Router + React + TypeScript + Tailwind CSS v4 + npm.
+
+Runtime dependencies: `next`, `react`, `react-dom` only. No state library,
+CSS-in-JS, UI kit, CMS, or animation libraries (GSAP, Framer Motion, Lenis,
+etc.). No `src/hooks/` or `src/lib/`.
 
 ## Folder tree
 
-```
+```text
 src
 ├── app
+│   ├── favicon.ico
 │   ├── globals.css      # tokens + loading / scroll-hint / menu-toggle CSS
 │   ├── layout.tsx       # root HTML, fonts, metadata
 │   └── page.tsx         # homepage composition only
@@ -32,7 +40,6 @@ src
 │   ├── SiteShell.tsx
 │   ├── VideoBackground.tsx
 │   └── sections/
-│       ├── index.ts      # barrel — NOT currently imported anywhere
 │       ├── HeroSection.tsx
 │       ├── HeroScrollHint.tsx
 │       ├── PhilosophySection.tsx
@@ -48,78 +55,120 @@ src
     └── index.ts           # MenuItem
 ```
 
+Single route: `/` (`src/app/page.tsx`).
+
 ## Dependency flow
 
-```
+```text
 page.tsx
    ├── LoadingScreen               (fixed overlay, then unmounts)
    └── SiteShell
           ├── NavigationProvider   (wraps the whole shell)
           │      ├── Header → MenuButton
-          │      ├── page surface (slides when menu open)
+          │      ├── page surface (CSS transform when menu open)
           │      │      ├── HeroSection → VideoBackground, Container, HeroScrollHint
-          │      │      ├── PhilosophySection → SectionShell → Container, SectionIntro
-          │      │      ├── PracticeSection   → SectionShell, SectionIntro, offering list
-          │      │      ├── BenefitsSection   → …
-          │      │      ├── JourneySection    → …
-          │      │      ├── CommunitySection  → …, Card × N
-          │      │      ├── ContactSection    → …, Button
+          │      │      ├── PhilosophySection → SectionShell, SectionIntro
+          │      │      ├── PracticeSection   → SectionShell, SectionIntro
+          │      │      ├── BenefitsSection   → SectionShell, SectionIntro
+          │      │      ├── JourneySection    → SectionShell, SectionIntro
+          │      │      ├── CommunitySection  → SectionShell, SectionIntro, Card
+          │      │      ├── ContactSection    → SectionShell, SectionIntro, Button
           │      │      └── Footer → Container
           │      └── NavigationPanel → data/menu → types/MenuItem
 ```
 
 **Rules this encodes:**
+
 - Sections never import the shell or each other.
 - Shared UI (`Container`, `Card`, `SectionShell`, …) never imports sections.
-- `VideoBackground` / `HeroScrollHint` watch `#hero` via the DOM directly —
-  there is no shared scroll/observer manager.
-- `page.tsx` imports each section by path. `sections/index.ts` is unused;
-  either wire it in or delete it (see CONTRIBUTING.md).
+- `VideoBackground` and `HeroScrollHint` observe `#hero` via the DOM—there is
+  no shared scroll/observer manager.
+- `page.tsx` imports each section by path (no sections barrel).
+
+## Navigation (actual implementation)
+
+- **State:** `NavigationContext` — `isOpen`, `toggle` / `close`, panel width,
+  page/panel refs, body scroll lock, Escape-to-close.
+- **Motion:** CSS only. `SiteShell` applies `transform` / `border-radius`
+  transitions on the page surface while open; `NavigationPanel` slides with a
+  CSS `transform` transition. Menu control morph is CSS in `globals.css`
+  (`.menu-toggle`). No GSAP or other animation library.
+- **Behavior:** Menu opens and closes. Panel links are presentation-only
+  (`disabled` buttons)—no client-side routing to section anchors yet.
+- **Header:** Fixed to the viewport; does not slide with the page surface.
 
 ## Component responsibilities
 
 | File | Purpose | Consumers | Shared? |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `SiteShell` | Chrome: provider, header, sliding page, nav panel | `page.tsx` | No |
-| `NavigationContext` | `isOpen`, toggle/close, scroll lock, panel width, Escape | Shell, MenuButton, NavigationPanel | Yes — the only global state |
+| `NavigationContext` | Nav open state, scroll lock, panel width, Escape | Shell, MenuButton, NavigationPanel | Yes — only global state |
 | `Header` | Fixed top bar: brand + menu control | SiteShell | No |
-| `MenuButton` | Hamburger ↔ × | Header | No |
-| `NavigationPanel` | Right drawer links | SiteShell | No |
+| `MenuButton` | Hamburger ↔ × (CSS morph) | Header | No |
+| `NavigationPanel` | Right drawer; presentation-only links | SiteShell | No |
 | `LoadingScreen` | Fullscreen load, then unmounts | `page.tsx` | No |
 | `VideoBackground` | Fixed hero video, fade, handoff, pause/restart | HeroSection | No |
-| `SectionShell` | Full-viewport section frame + Container | All content sections except Hero | Yes |
+| `SectionShell` | Full-viewport section frame + Container | Content sections except Hero | Yes |
 | `Container` | Max-width + gutters | SectionShell, HeroSection, Footer | Yes |
 | `SectionLabel` | Uppercase kicker | SectionIntro | Yes (via intro) |
-| `Button` | Primary/secondary button | ContactSection only | Designed shared, 1 consumer |
-| `Card` | Bordered surface | Community only | Designed shared, 1 consumer |
-| `Footer` | Footer brand + copyright | `page.tsx` | No |
-| `SectionIntro` | Label + h2 + description | 6 content sections | Yes |
-| `sections/index.ts` | Barrel re-exports | Nobody (currently) | Dead weight until resolved |
+| `Button` | Primary/secondary button | ContactSection only | Reusable primitive, 1 consumer today |
+| `Card` | Bordered surface | Community only | Reusable primitive, 1 consumer today |
+| `Footer` | Brand + copyright | `page.tsx` | No |
+| `SectionIntro` | Label + h2 + description | Six content sections | Yes |
 | `data/menu.ts` | Static nav labels | NavigationPanel | Data |
 | `types/index.ts` | `MenuItem` | `data/menu.ts` | Types |
 
-**Critical path** (breaking these breaks the page): `layout`, `page`,
-`SiteShell`, nav stack, Hero + `VideoBackground`, the six content sections,
-`Footer`, `globals.css`.
+**Critical path:** `layout`, `page`, `SiteShell`, nav stack, Hero +
+`VideoBackground`, the six content sections, `Footer`, `globals.css`.
 
-**Helpers** (safe to refactor locally without wider blast radius):
-`Container`, `SectionShell`, `SectionIntro`, `SectionLabel`, `Card`,
-`Button`, `HeroScrollHint`.
+**Helpers (local blast radius):** `Container`, `SectionShell`, `SectionIntro`,
+`SectionLabel`, `Card`, `Button`, `HeroScrollHint`.
 
-## Why the section split exists
+## Section composition
 
-Each `*Section.tsx` is a vertical band of the marketing page with its own
-`id` and copy — a page *chapter*, not a deep module. `page.tsx` stays a
-short table of contents. Hero is split further only because it has real
-client lifecycle (video + `IntersectionObserver`); the other six sections
-are simple and split purely so one can be edited without opening another.
+Stack order is fixed in `page.tsx`:
+
+| Order | File | Role |
+| --- | --- | --- |
+| 1 | `HeroSection.tsx` | Full-viewport hero, video background, headline, scroll cue |
+| 2 | `PhilosophySection.tsx` | Principles (editorial list) |
+| 3 | `PracticeSection.tsx` | Practice offerings list |
+| 4 | `BenefitsSection.tsx` | Benefits grid |
+| 5 | `JourneySection.tsx` | Numbered path |
+| 6 | `CommunitySection.tsx` | Intro + stacked cards |
+| 7 | `ContactSection.tsx` | Details + CTA button |
+
+| Goal | Edit |
+| --- | --- |
+| One section’s copy or layout | Matching file under `sections/` |
+| Homepage order | Component order in `page.tsx` |
+| Add a section | New file under `sections/` + path import in `page.tsx` |
+
+Each `*Section.tsx` is a page *chapter*, not a deep module. Hero is split
+further (`VideoBackground`, `HeroScrollHint`) because of real client lifecycle.
+
+## Design tokens
+
+Defined in `src/app/globals.css`:
+
+| Token | Role |
+| --- | --- |
+| `background` | Page background (dark-only) |
+| `foreground` | Primary text / solid controls |
+| `muted` | Secondary text |
+| `border` | Outlines and dividers |
+| `surface` | Soft fill |
+| `rounded-soft` | Shared corner radius |
+| `--ease-premium` / related durations | Shared motion easing |
+
+Default container: wide max-width with responsive horizontal padding. Content
+sections use `SectionShell` (`min-h-svh`). Separation is spacing and composition.
 
 ## Data / state flow
 
-```
+```text
 Static copy   → inlined in each *Section.tsx
 Menu labels   → data/menu.ts → NavigationPanel only
 UI state      → NavigationContext only
 Scroll FX     → local IntersectionObserver in VideoBackground & HeroScrollHint
-                (no global store, no hooks/, no lib/)
 ```

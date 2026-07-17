@@ -4,8 +4,8 @@ import { useNavigation } from "@/components/NavigationContext";
 
 /**
  * Single global navigation control.
- * Closed: Menu ≡  |  Open: Close ×
- * Same position always — CSS transitions handle label + icon crossfade.
+ * Closed: Menu + hamburger  |  Open: Close + morph to ×
+ * Same position always — icon lines morph; labels swap with a short rise.
  */
 export default function MenuButton() {
   const { isOpen, toggle } = useNavigation();
@@ -14,44 +14,30 @@ export default function MenuButton() {
     <button
       type="button"
       onClick={toggle}
-      className="inline-flex min-h-11 cursor-pointer items-center gap-3 bg-transparent p-0 text-sm font-medium tracking-wide text-foreground"
+      data-open={isOpen ? "true" : "false"}
+      className="menu-toggle inline-flex min-h-11 cursor-pointer items-center gap-3 bg-transparent p-0 text-sm font-medium tracking-wide text-foreground"
       aria-expanded={isOpen}
       aria-controls="navigation-panel"
       aria-label={isOpen ? "Close menu" : "Open menu"}
     >
-      {/* Labels stacked & right-aligned so the control's right edge never shifts */}
-      <span className="relative inline-block h-[1.25em] w-[3.5rem]">
-        <span
-          className="absolute inset-0 flex items-center justify-end transition-opacity duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-          style={{ opacity: isOpen ? 0 : 1 }}
-        >
+      {/* Labels — fixed width, right-aligned so the control edge never shifts */}
+      <span className="menu-toggle__labels relative inline-block h-[1.25em] w-[3.5rem] overflow-hidden">
+        <span className="menu-toggle__label menu-toggle__label--menu absolute inset-0 flex items-center justify-end">
           Menu
         </span>
         <span
-          className="absolute inset-0 flex items-center justify-end transition-opacity duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+          className="menu-toggle__label menu-toggle__label--close absolute inset-0 flex items-center justify-end"
           aria-hidden="true"
-          style={{ opacity: isOpen ? 1 : 0 }}
         >
           Close
         </span>
       </span>
 
-      {/* Icons stacked in a fixed slot */}
-      <span className="relative inline-block h-4 w-4 shrink-0" aria-hidden="true">
-        <span
-          className="absolute inset-0 flex flex-col items-center justify-center gap-[5px] transition-opacity duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-          style={{ opacity: isOpen ? 0 : 1 }}
-        >
-          <span className="block h-px w-4 bg-current" />
-          <span className="block h-px w-4 bg-current" />
-          <span className="block h-px w-4 bg-current" />
-        </span>
-        <span
-          className="absolute inset-0 flex items-center justify-center text-base leading-none transition-opacity duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
-          style={{ opacity: isOpen ? 1 : 0 }}
-        >
-          ×
-        </span>
+      {/* Three lines → × */}
+      <span className="menu-toggle__icon relative inline-block h-3.5 w-4 shrink-0" aria-hidden="true">
+        <span className="menu-toggle__line menu-toggle__line--top" />
+        <span className="menu-toggle__line menu-toggle__line--mid" />
+        <span className="menu-toggle__line menu-toggle__line--bot" />
       </span>
     </button>
   );

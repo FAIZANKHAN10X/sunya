@@ -101,9 +101,12 @@ export default function VideoBackground({ src, poster }: VideoBackgroundProps) {
   }, []);
 
   return (
+    // Use top/left + h-svh (not inset-0). When the nav opens, SiteShell applies
+    // transform to the page surface and traps position:fixed; inset-0 would then
+    // stretch this layer to the full page height and object-cover would zoom in.
     <div
       ref={rootRef}
-      className="fixed inset-0 z-0 pointer-events-none bg-background transition-[opacity,visibility] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+      className="pointer-events-none fixed top-0 left-0 z-0 h-svh w-full bg-background transition-[opacity,visibility] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
       aria-hidden="true"
     >
       <video

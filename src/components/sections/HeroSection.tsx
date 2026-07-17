@@ -10,7 +10,7 @@ export default function HeroSection() {
       className="relative flex min-h-svh flex-col justify-center overflow-hidden"
     >
       <VideoBackground
-        src="https://res.cloudinary.com/dmilaim58/video/upload/v1769761123/samples/cld-sample-video.mp4"
+        src="https://res.cloudinary.com/dmilaim58/video/upload/v1784299756/WhatsApp_Video_2026-07-17_at_17.44.40_axryf5.mp4"
         poster="https://res.cloudinary.com/dmilaim58/video/upload/so_0/v1769761123/samples/cld-sample-video.jpg"
       />
 

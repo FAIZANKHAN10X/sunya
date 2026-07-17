@@ -11,7 +11,8 @@ import SiteShell from "@/components/SiteShell";
 
 export default function Home() {
   return (
-    <LoadingScreen>
+    <>
+      <LoadingScreen />
       <SiteShell>
         <main>
           <HeroSection />
@@ -24,6 +25,6 @@ export default function Home() {
         </main>
         <Footer />
       </SiteShell>
-    </LoadingScreen>
+    </>
   );
 }

@@ -3,18 +3,27 @@
 import { useNavigation } from "@/components/NavigationContext";
 import { menuItems, quickLinks, socialLinks } from "@/data/menu";
 
+const NAV_DURATION = 1000;
+const NAV_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+
 /**
- * Right navigation surface — enters via the master GSAP timeline.
+ * Right navigation surface.
  * No Close control here; that lives only in the global header.
  */
 export default function NavigationPanel() {
   const { isOpen, panelRef } = useNavigation();
+
+  const panelStyle: React.CSSProperties = {
+    transform: isOpen ? "translateX(0px)" : "translateX(100%)",
+    transition: `transform ${NAV_DURATION}ms ${NAV_EASE}`,
+  };
 
   return (
     <aside
       ref={panelRef}
       id="navigation-panel"
       className="fixed top-0 right-0 z-30 flex h-svh w-[min(88vw,28rem)] flex-col bg-background md:w-[min(38vw,28rem)]"
+      style={panelStyle}
       aria-hidden={!isOpen}
       aria-label="Site navigation"
     >

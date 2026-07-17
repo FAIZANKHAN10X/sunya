@@ -92,11 +92,28 @@ body {
   animation: sunya-load-caption 700ms var(--ease-premium) 250ms both;
 }
 
+/* —— Scroll hint —— */
+
+@keyframes sunya-scroll-hint {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+}
+
+.hero-scroll-hint {
+  animation: sunya-scroll-hint 3.5s var(--ease-premium) 1.5s infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .loading-screen,
   .loading-screen__mark,
   .loading-screen__line,
-  .loading-screen__caption {
+  .loading-screen__caption,
+  .hero-scroll-hint {
     animation: none !important;
     transition: none !important;
   }

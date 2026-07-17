@@ -7,12 +7,25 @@ import NavigationProvider, {
   useNavigation,
 } from "@/components/NavigationContext";
 
+const NAV_DURATION = 1000;
+const NAV_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+const NAV_BORDER_RADIUS = 24;
+
 type SiteShellProps = {
   children: ReactNode;
 };
 
 function SiteShellInner({ children }: SiteShellProps) {
-  const { isOpen, close, pageRef } = useNavigation();
+  const { isOpen, close, pageRef, panelWidth } = useNavigation();
+
+  // transform/will-change only while open — otherwise they create a containing
+  // block that traps position:fixed descendants (e.g. Hero video background).
+  const pageStyle: React.CSSProperties = {
+    transform: isOpen ? `translateX(-${panelWidth}px)` : "none",
+    borderRadius: isOpen ? `${NAV_BORDER_RADIUS}px` : "0px",
+    transition: `transform ${NAV_DURATION}ms ${NAV_EASE}, border-radius ${NAV_DURATION}ms ${NAV_EASE}`,
+    willChange: isOpen ? "transform" : "auto",
+  };
 
   return (
     <div className="relative min-h-svh overflow-hidden bg-background">
@@ -22,7 +35,8 @@ function SiteShellInner({ children }: SiteShellProps) {
       {/* Homepage surface — slides left on the master timeline */}
       <div
         ref={pageRef}
-        className="relative z-10 min-h-svh overflow-hidden bg-background will-change-transform"
+        className="relative z-10 min-h-svh overflow-hidden bg-background"
+        style={pageStyle}
       >
         {isOpen ? (
           <button

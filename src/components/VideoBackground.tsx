@@ -7,11 +7,16 @@ type VideoBackgroundProps = {
   poster: string;
 };
 
+/** Hero ratio below this: begin dissolving the black sheet into the next section. */
+const HANDOFF_RATIO = 0.28;
+const HIDE_MS = 500;
+
 export default function VideoBackground({ src, poster }: VideoBackgroundProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const wasAtZeroRef = useRef(false);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -24,35 +29,59 @@ export default function VideoBackground({ src, poster }: VideoBackgroundProps) {
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
+    const clearHideTimer = () => {
+      if (hideTimerRef.current !== null) {
+        clearTimeout(hideTimerRef.current);
+        hideTimerRef.current = null;
+      }
+    };
+
     const deactivate = () => {
-      root.style.visibility = "hidden";
       root.style.opacity = "0";
+      clearHideTimer();
+      // Let opacity transition finish before removing from paint.
+      hideTimerRef.current = setTimeout(() => {
+        if (wasAtZeroRef.current) {
+          root.style.visibility = "hidden";
+        }
+      }, prefersReduced ? 0 : HIDE_MS);
     };
 
     const activate = () => {
+      clearHideTimer();
       root.style.visibility = "visible";
-      root.style.opacity = "1";
     };
+
+    const smoothstep = (t: number) => t * t * (3 - 2 * t);
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         const t = entry.intersectionRatio;
-        const eased = t * t * (3 - 2 * t);
 
         if (t === 0) {
           if (!wasAtZeroRef.current) {
             wasAtZeroRef.current = true;
             video.pause();
           }
-          // Tear down the whole fixed system so it cannot cover later sections.
+          if (!prefersReduced) {
+            overlay.style.opacity = "1";
+          }
           deactivate();
           return;
         }
 
         activate();
 
-        if (!prefersReduced) {
-          overlay.style.opacity = String(1 - eased);
+        if (prefersReduced) {
+          root.style.opacity = "1";
+          overlay.style.opacity = "0";
+        } else {
+          // Phase A: video → black as the Hero leaves.
+          overlay.style.opacity = String(1 - smoothstep(t));
+
+          // Phase B: dissolve the black sheet so Philosophy eases in (no hard cut).
+          const handoff = Math.min(1, t / HANDOFF_RATIO);
+          root.style.opacity = String(smoothstep(handoff));
         }
 
         if (t > 0.05 && wasAtZeroRef.current) {
@@ -61,17 +90,20 @@ export default function VideoBackground({ src, poster }: VideoBackgroundProps) {
           void video.play();
         }
       },
-      { threshold: Array.from({ length: 11 }, (_, i) => i / 10) },
+      { threshold: Array.from({ length: 21 }, (_, i) => i / 20) },
     );
 
     observer.observe(hero);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      clearHideTimer();
+    };
   }, []);
 
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-0 pointer-events-none bg-background"
+      className="fixed inset-0 z-0 pointer-events-none bg-background transition-[opacity,visibility] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
       aria-hidden="true"
     >
       <video
@@ -87,7 +119,7 @@ export default function VideoBackground({ src, poster }: VideoBackgroundProps) {
       />
       <div
         ref={overlayRef}
-        className="absolute inset-0 bg-background"
+        className="absolute inset-0 bg-background transition-opacity duration-150 ease-linear motion-reduce:transition-none"
         style={{ opacity: 0 }}
       />
     </div>

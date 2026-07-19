@@ -19,30 +19,43 @@ export default function HeroSection() {
         poster="https://res.cloudinary.com/dmilaim58/video/upload/so_0/v1769761123/samples/cld-sample-video.jpg"
       />
 
-      {/* Quiet depth — restrained, not decorative noise */}
+      {/* Quiet depth — no full-frame darken over the video */}
       <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden="true">
-        <div className="absolute inset-x-0 top-0 h-px bg-border/60" />
-        <div className="absolute top-1/2 left-1/2 h-[min(70vw,36rem)] w-[min(70vw,36rem)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/[0.03]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-border/50" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-border/40" />
+        <div className="absolute top-1/2 left-1/2 h-[min(78vw,40rem)] w-[min(78vw,40rem)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/[0.025]" />
       </div>
 
       <Container className="relative z-10 w-full py-28 sm:py-32">
-        <p className="mx-auto mb-8 max-w-xl text-center text-xs font-medium tracking-[0.28em] text-muted uppercase sm:mb-10">
-          A philosophy of healing
-        </p>
-        <h1
-          id="hero-heading"
-          className="mx-auto max-w-4xl text-center text-4xl font-medium tracking-[-0.03em] text-foreground sm:text-5xl md:text-6xl lg:text-[4.75rem] lg:leading-[1.1]"
-        >
-          Return to the quiet
-          <br className="hidden sm:block" />
-          that was always yours.
-        </h1>
-        <p className="mx-auto mt-8 max-w-md text-center text-sm leading-relaxed text-muted sm:mt-10 sm:text-base">
-          Presence. Discipline. A life practiced from the inside out.
-        </p>
+        <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
+          <div className="mb-8 flex items-center gap-4 sm:mb-10">
+            <span className="h-px w-6 bg-border sm:w-8" aria-hidden="true" />
+            <p className="text-xs font-medium tracking-[0.28em] text-muted uppercase">
+              A philosophy of healing
+            </p>
+            <span className="h-px w-6 bg-border sm:w-8" aria-hidden="true" />
+          </div>
+
+          <h1
+            id="hero-heading"
+            className="text-4xl font-medium tracking-[-0.03em] text-foreground sm:text-5xl md:text-6xl lg:text-[4.75rem] lg:leading-[1.08]"
+          >
+            Return to the quiet
+            <br className="hidden sm:block" />
+            that was always yours.
+          </h1>
+
+          <p className="mt-8 max-w-sm text-sm leading-relaxed text-muted sm:mt-10 sm:max-w-md sm:text-base">
+            Presence. Discipline. A life practiced from the inside out.
+          </p>
+        </div>
       </Container>
 
-      <div className="absolute inset-x-0 bottom-8 z-10 flex justify-center sm:bottom-10">
+      <div className="absolute inset-x-0 bottom-8 z-10 flex flex-col items-center gap-3 sm:bottom-10">
+        <span
+          className="h-8 w-px bg-gradient-to-b from-transparent via-border to-border/80 sm:h-10"
+          aria-hidden="true"
+        />
         <HeroScrollHint />
       </div>
     </section>

@@ -75,7 +75,7 @@ page.tsx
           │      │      ├── BeliefsSection      → SectionShell, SectionIntro
           │      │      ├── FrameworkSection    → SectionShell, SectionIntro
           │      │      ├── NotesSection        → SectionShell, SectionIntro
-          │      │      ├── CommunitySection    → SectionShell, SectionIntro, Card
+          │      │      ├── CommunitySection    → SectionShell, SectionIntro
           │      │      ├── ExperiencesSection  → SectionShell, SectionIntro
           │      │      ├── StoriesSection      → SectionShell, SectionIntro
           │      │      ├── BeginSection        → SectionShell, Button
@@ -118,7 +118,7 @@ page.tsx
 | `Container` | Max-width + gutters | SectionShell, HeroSection, Footer | Yes |
 | `SectionLabel` | Uppercase kicker | SectionIntro | Yes (via intro) |
 | `Button` | Primary/secondary button | BeginSection only | Reusable primitive, 1 consumer today |
-| `Card` | Bordered surface | Community only | Reusable primitive, 1 consumer today |
+| `Card` | Bordered surface | Available; sections use local article layouts | Reusable primitive |
 | `Footer` | Brand + copyright | `page.tsx` | No |
 | `SectionIntro` | Label + h2 + description | Most content sections | Yes |
 | `data/menu.ts` | Static nav labels | NavigationPanel | Data |

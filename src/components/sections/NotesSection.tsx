@@ -40,22 +40,42 @@ export default function NotesSection() {
           descriptionClassName="max-w-xl"
         />
 
-        <ul className="mt-14 grid gap-5 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
-          {notes.map((item) => (
-            <li key={item.title}>
-              <article className="flex h-full flex-col rounded-soft border border-border bg-surface p-7 sm:p-8">
-                <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">
-                  {item.meta}
-                </p>
-                <h3 className="mt-8 text-lg font-medium tracking-tight text-foreground sm:mt-10 sm:text-xl">
-                  {item.title}
-                </h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-muted sm:text-base">
-                  {item.description}
-                </p>
-                <p className="mt-8 text-xs font-medium tracking-[0.18em] text-muted uppercase">
-                  Coming soon
-                </p>
+        <ul className="mt-14 grid gap-4 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
+          {notes.map((item, index) => (
+            <li key={item.title} className={index === 0 ? "sm:col-span-2 lg:col-span-1" : ""}>
+              <article className="group flex h-full flex-col rounded-soft border border-border bg-surface/30 p-7 transition-[border-color,background-color,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-foreground/20 hover:bg-surface hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:p-8">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">
+                    {item.meta}
+                  </p>
+                  <span
+                    className="text-xs font-medium tracking-[0.14em] text-muted/60 tabular-nums"
+                    aria-hidden="true"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
+
+                <div className="mt-10 flex flex-1 flex-col sm:mt-14">
+                  <h3 className="text-xl font-medium tracking-tight text-foreground sm:text-2xl">
+                    {item.title}
+                  </h3>
+                  <p className="mt-4 flex-1 text-sm leading-relaxed text-muted sm:text-base">
+                    {item.description}
+                  </p>
+                </div>
+
+                <div className="mt-10 flex items-center justify-between border-t border-border pt-6">
+                  <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">
+                    Coming soon
+                  </p>
+                  <span
+                    className="text-muted transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-foreground motion-reduce:transition-none"
+                    aria-hidden="true"
+                  >
+                    →
+                  </span>
+                </div>
               </article>
             </li>
           ))}

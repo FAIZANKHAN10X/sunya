@@ -40,20 +40,45 @@ export default function StoriesSection() {
           descriptionClassName="max-w-xl"
         />
 
-        <ul className="mt-14 grid gap-5 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
-          {stories.map((item) => (
-            <li key={item.quote}>
-              <figure className="flex h-full flex-col rounded-soft border border-border p-7 sm:p-8">
-                <blockquote className="flex-1 text-base leading-relaxed text-foreground sm:text-lg">
-                  “{item.quote}”
+        <ul className="mt-14 grid gap-4 sm:mt-16 lg:grid-cols-3">
+          {stories.map((item, index) => (
+            <li
+              key={item.quote}
+              className={index === 0 ? "lg:col-span-1" : undefined}
+            >
+              <figure
+                className={`relative flex h-full flex-col rounded-soft border border-border p-7 sm:p-8 ${
+                  index === 1
+                    ? "bg-surface lg:mt-10"
+                    : index === 2
+                      ? "lg:mt-5"
+                      : "bg-transparent"
+                }`}
+              >
+                <span
+                  className="font-serif text-5xl leading-none text-foreground/15 select-none"
+                  aria-hidden="true"
+                >
+                  “
+                </span>
+                <blockquote className="mt-4 flex-1 text-base leading-relaxed text-foreground sm:text-lg">
+                  {item.quote}
                 </blockquote>
-                <figcaption className="mt-10 border-t border-border pt-6">
-                  <p className="text-sm font-medium tracking-tight text-foreground">
-                    {item.name}
-                  </p>
-                  <p className="mt-1 text-xs font-medium tracking-[0.14em] text-muted uppercase">
-                    {item.detail}
-                  </p>
+                <figcaption className="mt-10 flex items-end justify-between gap-4 border-t border-border pt-6">
+                  <div>
+                    <p className="text-sm font-medium tracking-tight text-foreground">
+                      {item.name}
+                    </p>
+                    <p className="mt-1 text-xs font-medium tracking-[0.14em] text-muted uppercase">
+                      {item.detail}
+                    </p>
+                  </div>
+                  <span
+                    className="text-xs font-medium tracking-[0.14em] text-muted/50 tabular-nums"
+                    aria-hidden="true"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                 </figcaption>
               </figure>
             </li>

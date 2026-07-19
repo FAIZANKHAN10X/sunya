@@ -1,4 +1,3 @@
-import Card from "@/components/Card";
 import SectionIntro from "@/components/sections/SectionIntro";
 import SectionShell from "@/components/SectionShell";
 
@@ -23,31 +22,46 @@ const items = [
 /**
  * SECTION 07 — Community
  * Future community touchpoints: list, private circle, and events.
- * Stacked cards keep a calm, non-sales rhythm.
+ * Horizontal rows keep a calm, non-sales rhythm.
  */
 export default function CommunitySection() {
   return (
     <SectionShell id="community" labelledBy="community-heading">
-      <div className="grid w-full gap-14 lg:grid-cols-12 lg:items-center lg:gap-16">
+      <div className="grid w-full gap-14 lg:grid-cols-12 lg:gap-16 xl:gap-20">
         <SectionIntro
           id="community-heading"
           label="Belonging"
           heading="Community"
           description="Practice deepens in company—when the room is sincere. These are the doors into that field."
-          className="lg:col-span-5"
+          className="lg:col-span-4"
           descriptionClassName="max-w-lg"
         />
-        <ul className="grid gap-5 lg:col-span-7">
-          {items.map((item) => (
+
+        <ul className="divide-y divide-border border-y border-border lg:col-span-8">
+          {items.map((item, index) => (
             <li key={item.title}>
-              <Card className="p-7 sm:flex sm:items-start sm:justify-between sm:gap-10 sm:p-8">
-                <h3 className="shrink-0 text-lg font-medium tracking-tight text-foreground sm:w-44 sm:text-xl">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted sm:mt-0 sm:max-w-md sm:text-base">
-                  {item.description}
-                </p>
-              </Card>
+              <article className="group grid gap-4 py-8 transition-colors duration-300 sm:grid-cols-[auto_1fr_auto] sm:items-baseline sm:gap-8 sm:py-10 motion-reduce:transition-none">
+                <span
+                  className="text-xs font-medium tracking-[0.18em] text-muted tabular-nums"
+                  aria-hidden="true"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="min-w-0 sm:max-w-lg">
+                  <h3 className="text-xl font-medium tracking-tight text-foreground transition-colors duration-300 group-hover:text-foreground sm:text-2xl">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+                    {item.description}
+                  </p>
+                </div>
+                <span
+                  className="hidden text-muted transition-[transform,color] duration-300 group-hover:translate-x-1 group-hover:text-foreground sm:inline motion-reduce:transition-none"
+                  aria-hidden="true"
+                >
+                  →
+                </span>
+              </article>
             </li>
           ))}
         </ul>

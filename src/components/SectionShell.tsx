@@ -22,7 +22,7 @@ export default function SectionShell({
     <section
       id={id}
       aria-labelledby={labelledBy}
-      className={`flex min-h-svh items-center py-24 sm:py-28 ${className}`}
+      className={`relative flex min-h-svh items-center py-24 sm:py-28 lg:py-32 ${className}`}
     >
       <Container className="w-full">{children}</Container>
     </section>

@@ -21,10 +21,16 @@ export default function SectionIntro({
 }: SectionIntroProps) {
   return (
     <div className={className}>
-      <SectionLabel>{label}</SectionLabel>
+      <div className="flex items-center gap-4">
+        <SectionLabel>{label}</SectionLabel>
+        <span
+          className="h-px w-8 bg-border sm:w-10"
+          aria-hidden="true"
+        />
+      </div>
       <h2
         id={id}
-        className={`mt-5 text-3xl font-medium tracking-tight text-foreground sm:text-4xl lg:text-5xl lg:leading-[1.1] ${headingClassName}`}
+        className={`mt-5 text-3xl font-medium tracking-tight text-foreground sm:text-4xl lg:text-[2.75rem] lg:leading-[1.12] xl:text-5xl ${headingClassName}`}
       >
         {heading}
       </h2>

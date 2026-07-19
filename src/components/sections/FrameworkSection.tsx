@@ -37,37 +37,41 @@ const pillars = [
 export default function FrameworkSection() {
   return (
     <SectionShell id="framework" labelledBy="framework-heading">
-      <div className="grid w-full gap-14 lg:grid-cols-12 lg:items-start lg:gap-20 xl:gap-24">
-        <SectionIntro
-          id="framework-heading"
-          label="Methodology"
-          heading="The framework"
-          description="Five pillars of a lived system. Practice moves through each—never as a checklist, always as a whole."
-          className="lg:col-span-5"
-          descriptionClassName="max-w-md"
-        />
+      <div className="w-full">
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-16">
+          <SectionIntro
+            id="framework-heading"
+            label="Methodology"
+            heading="The framework"
+            description="Five pillars of a lived system. Practice moves through each—never as a checklist, always as a whole."
+            className="lg:col-span-7"
+            descriptionClassName="max-w-md"
+          />
+          <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase lg:col-span-5 lg:text-right">
+            05 pillars · one practice
+          </p>
+        </div>
 
-        <ul className="flex flex-col lg:col-span-7 lg:pt-1">
+        <ul className="mt-14 grid gap-px overflow-hidden rounded-soft border border-border bg-border sm:mt-16 sm:grid-cols-2 lg:grid-cols-5">
           {pillars.map((item, index) => (
-            <li
-              key={item.title}
-              className="border-t border-border py-8 first:border-t-0 first:pt-0 sm:py-9"
-            >
-              <article className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-2 sm:gap-x-8">
+            <li key={item.title} className="bg-background">
+              <article className="group flex h-full min-h-[16rem] flex-col bg-background p-6 transition-colors duration-300 hover:bg-surface sm:min-h-[18rem] sm:p-7 motion-reduce:transition-none lg:min-h-[22rem]">
                 <span
-                  className="pt-1 text-xs font-medium tracking-[0.18em] text-muted tabular-nums"
+                  className="text-xs font-medium tracking-[0.18em] text-muted tabular-nums"
                   aria-hidden="true"
                 >
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <div className="min-w-0">
-                  <h3 className="text-lg font-medium tracking-tight text-foreground sm:text-xl">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 max-w-md text-sm leading-relaxed text-muted sm:mt-3 sm:text-base">
-                    {item.description}
-                  </p>
-                </div>
+                <h3 className="mt-8 text-xl font-medium tracking-tight text-foreground sm:mt-10 sm:text-2xl">
+                  {item.title}
+                </h3>
+                <p className="mt-4 flex-1 text-sm leading-relaxed text-muted">
+                  {item.description}
+                </p>
+                <span
+                  className="mt-8 h-px w-6 bg-border transition-[width,background-color] duration-300 group-hover:w-10 group-hover:bg-foreground/40 motion-reduce:transition-none"
+                  aria-hidden="true"
+                />
               </article>
             </li>
           ))}

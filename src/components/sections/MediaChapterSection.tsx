@@ -1,91 +1,86 @@
-import Container from "@/components/Container";
+"use client";
 
-const frames = [
-  { label: "Practice", ratio: "aspect-[4/5]", span: "md:col-span-5" },
-  { label: "Stillness", ratio: "aspect-[16/10]", span: "md:col-span-7" },
-  { label: "Place", ratio: "aspect-[16/11]", span: "md:col-span-7" },
-  { label: "Detail", ratio: "aspect-[4/5]", span: "md:col-span-5" },
+import { useState } from "react";
+
+const images = [
+  {
+    src: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1600&q=80",
+    title: "Morning stillness",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1600&q=80",
+    title: "Breath in practice",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?auto=format&fit=crop&w=1600&q=80",
+    title: "The held room",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1600&q=80",
+    title: "Quiet form",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=1600&q=80",
+    title: "Return to body",
+  },
 ] as const;
 
 /**
- * Visual chapter — gallery placeholders. Full-width container.
+ * Expandable accordion image gallery.
+ * Hover expands a panel; titles appear only on the active card.
  */
 export default function MediaChapterSection() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <section
       id="presence"
-      aria-labelledby="presence-heading"
-      className="relative scroll-mt-20 border-y border-border/60 bg-background py-16 sm:scroll-mt-24 sm:py-20 md:py-28"
+      aria-label="Practice gallery"
+      className="relative scroll-mt-20 w-full sm:scroll-mt-24"
     >
-      <Container>
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-          <h2
-            id="presence-heading"
-            className="text-[1.75rem] font-medium leading-[1.1] tracking-tight text-foreground sm:text-3xl lg:text-4xl"
-          >
-            The practice, seen.
-          </h2>
-          <p className="max-w-xs text-sm leading-relaxed text-muted sm:text-right">
-            Bodies, rooms, breath, place. Replace with graded stills when ready.
-          </p>
-        </div>
-      </Container>
+      <ul
+        className="flex h-[500px] w-full flex-col gap-1 md:flex-row md:gap-1.5"
+        onMouseLeave={() => setActiveIndex(0)}
+      >
+        {images.map((image, index) => {
+          const isActive = activeIndex === index;
 
-      <div className="mt-10 sm:mt-14 md:hidden">
-        <ul className="flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {frames.map((frame, index) => (
-            <li key={frame.label} className="w-[78vw] shrink-0 snap-center">
+          return (
+            <li
+              key={image.src}
+              onMouseEnter={() => setActiveIndex(index)}
+              className={`relative min-h-0 min-w-0 cursor-pointer overflow-hidden transition-all duration-500 ease-out ${
+                isActive
+                  ? "flex-[2.2] md:flex-[3]"
+                  : "flex-[0.55] md:flex-[0.5]"
+              }`}
+            >
+              {/*
+                Fixed-scale image (no zoom on expand): always 500px tall and
+                at least full-viewport wide, centered; the panel only clips.
+              */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={image.src}
+                alt={image.title}
+                className="pointer-events-none absolute top-1/2 left-1/2 h-[500px] w-[100vw] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover object-center"
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
+              />
+
               <div
-                className={`relative w-full overflow-hidden border border-border bg-surface ${frame.ratio}`}
+                className={`pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent px-4 pt-16 pb-4 transition-opacity duration-500 ease-out sm:px-5 sm:pb-5 ${
+                  isActive ? "opacity-100" : "opacity-0"
+                }`}
               >
-                <MediaPlaceholder label={frame.label} index={index} />
+                <p className="text-sm font-medium tracking-tight text-white sm:text-base">
+                  {image.title}
+                </p>
               </div>
             </li>
-          ))}
-        </ul>
-      </div>
-
-      <Container className="mt-14 hidden md:block">
-        <ul className="grid grid-cols-12 gap-4 lg:gap-5">
-          {frames.map((frame, index) => (
-            <li key={frame.label} className={frame.span}>
-              <div
-                className={`relative w-full overflow-hidden border border-border bg-surface ${frame.ratio}`}
-              >
-                <MediaPlaceholder label={frame.label} index={index} />
-              </div>
-            </li>
-          ))}
-        </ul>
-      </Container>
+          );
+        })}
+      </ul>
     </section>
-  );
-}
-
-function MediaPlaceholder({
-  label,
-  index,
-}: {
-  label: string;
-  index: number;
-}) {
-  return (
-    <>
-      <div
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(245,245,245,0.04)_0%,transparent_65%)]"
-        aria-hidden="true"
-      />
-      <div className="absolute inset-0 flex flex-col justify-between p-5 sm:p-6">
-        <span className="text-[0.65rem] font-medium tracking-[0.18em] text-muted tabular-nums">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <div>
-          <p className="text-sm font-medium tracking-tight text-foreground">
-            {label}
-          </p>
-          <p className="mt-1 text-xs text-muted">Image placeholder</p>
-        </div>
-      </div>
-    </>
   );
 }

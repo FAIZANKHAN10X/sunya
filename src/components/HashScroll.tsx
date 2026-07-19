@@ -2,10 +2,11 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { smoothScrollToId } from "@/components/lenisBridge";
 
 /**
  * Handles /#section deep links after navigation from other routes.
- * Homepage-only; no-ops when the hash target is missing.
+ * Uses Lenis when available so motion matches in-page nav.
  */
 export default function HashScroll() {
   const pathname = usePathname();
@@ -22,13 +23,8 @@ export default function HashScroll() {
 
     // Wait for layout / loading overlay so offset is correct.
     const timer = window.setTimeout(() => {
-      const el = document.getElementById(hash);
-      if (!el) return;
-      el.scrollIntoView({
-        behavior: prefersReduced ? "auto" : "smooth",
-        block: "start",
-      });
-    }, 80);
+      smoothScrollToId(hash, prefersReduced);
+    }, 120);
 
     return () => clearTimeout(timer);
   }, [pathname]);

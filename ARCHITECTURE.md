@@ -12,9 +12,9 @@ addition.
 
 Next.js App Router + React + TypeScript + Tailwind CSS v4 + npm.
 
-Runtime dependencies: `next`, `react`, `react-dom` only. No state library,
-CSS-in-JS, UI kit, CMS, or animation libraries (GSAP, Framer Motion, Lenis,
-etc.). No `src/hooks/` or `src/lib/`.
+Runtime dependencies: `next`, `react`, `react-dom`, and **`lenis`** (smooth
+wheel scroll only). No GSAP, Framer Motion, state library, CSS-in-JS, UI kit,
+or CMS. No `src/hooks/` or `src/lib/`.
 
 ## Folder tree
 
@@ -38,6 +38,8 @@ src
 │   ├── MenuButton.tsx
 │   ├── NavigationContext.tsx
 │   ├── NavigationPanel.tsx
+│   ├── SmoothScroll.tsx     # Lenis root init (no GSAP)
+│   ├── lenisBridge.ts       # shared scrollTo / stop|start for Lenis
 │   ├── SectionLabel.tsx
 │   ├── SectionShell.tsx
 │   ├── SiteShell.tsx
@@ -100,14 +102,13 @@ contact/page.tsx
 - **State:** `NavigationContext` — `isOpen`, `toggle` / `close`,
   `scrollToSection`, panel width, page/panel refs, body scroll lock,
   Escape-to-close.
-- **Motion:** CSS only. `SiteShell` applies `transform` / `border-radius`
-  transitions on the page surface while open; `NavigationPanel` slides with a
-  CSS `transform` transition. Menu control morph is CSS in `globals.css`
-  (`.menu-toggle`). No GSAP or other animation library.
+- **Motion:** CSS for nav chrome. **Lenis** owns wheel smooth-scrolling
+  (`SmoothScroll` + `lenisBridge`). Menu open stops Lenis; close restarts it.
+  Section jumps use `smoothScrollToId` (Lenis `scrollTo` with header offset).
+  No GSAP. `prefers-reduced-motion: reduce` disables Lenis entirely.
 - **Primary menu:** Home, Introduction, Beliefs, Community, Stories, Begin —
-  each maps to a section id and scrolls smoothly (`scrollToSection` +
-  `scroll-behavior: smooth`). Off-home routes use `router.push('/#id')` with
-  `HashScroll` to complete the jump.
+  each maps to a section id and scrolls via Lenis. Off-home routes use
+  `router.push('/#id')` with `HashScroll` to complete the jump.
 - **Quick links:** Contact (`/contact`), Newsletter (`#newsletter`).
 - **Header:** Fixed to the viewport; brand returns home / scrolls to hero.
 

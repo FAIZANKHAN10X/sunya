@@ -11,6 +11,10 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
+import {
+  setLenisScrollLocked,
+  smoothScrollToId,
+} from "@/components/lenisBridge";
 
 type NavigationContextValue = {
   isOpen: boolean;
@@ -51,6 +55,7 @@ export default function NavigationProvider({
   const lockScroll = useCallback((locked: boolean) => {
     document.documentElement.style.overflow = locked ? "hidden" : "";
     document.body.style.overflow = locked ? "hidden" : "";
+    setLenisScrollLocked(locked);
   }, []);
 
   const open = useCallback(() => {
@@ -77,16 +82,7 @@ export default function NavigationProvider({
   }, [close, open]);
 
   const performScroll = useCallback((sectionId: string) => {
-    const el = document.getElementById(sectionId);
-    if (!el) return;
-
-    const behavior: ScrollBehavior = prefersReducedMotion() ? "auto" : "smooth";
-    el.scrollIntoView({ behavior, block: "start" });
-
-    // Keep URL hash in sync without an extra jump.
-    if (window.history.replaceState) {
-      window.history.replaceState(null, "", `#${sectionId}`);
-    }
+    smoothScrollToId(sectionId, prefersReducedMotion());
   }, []);
 
   const scrollToSection = useCallback(
@@ -100,7 +96,8 @@ export default function NavigationProvider({
       if (wasOpen) close();
 
       // Wait a beat if the menu was open so the transform does not fight scroll.
-      const delay = wasOpen && !prefersReducedMotion() ? SCROLL_AFTER_CLOSE_MS : 0;
+      const delay =
+        wasOpen && !prefersReducedMotion() ? SCROLL_AFTER_CLOSE_MS : 0;
       if (delay === 0) {
         performScroll(sectionId);
         return;
@@ -148,9 +145,9 @@ export default function NavigationProvider({
   useEffect(() => {
     return () => {
       if (scrollTimerRef.current !== null) clearTimeout(scrollTimerRef.current);
-      // Avoid leaving body locked if unmounted mid-open.
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
+      setLenisScrollLocked(false);
     };
   }, []);
 

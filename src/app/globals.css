@@ -25,18 +25,13 @@
 
 html {
   color-scheme: dark;
-  scroll-behavior: smooth;
+  /* Scroll smoothing is owned by Lenis (SmoothScroll); do not also set
+     scroll-behavior: smooth — the two fight each other. */
   scroll-padding-top: var(--header-offset);
   /* Prevent horizontal rubber-band / layout jump on mobile */
   overflow-x: clip;
   /* Smoother mobile scrolling */
   -webkit-text-size-adjust: 100%;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
 }
 
 body {

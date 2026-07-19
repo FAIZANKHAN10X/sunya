@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { setLenisScrollLocked } from "@/components/lenisBridge";
 
 const MIN_LOAD_MS = 900;
 const EXIT_DURATION_MS = 700;
@@ -11,6 +12,7 @@ type LoadState = "loading" | "exiting" | "done";
 /**
  * Fullscreen load gate. Sits above header (z-[100]), waits for fonts + min time,
  * then fades out and unmounts. Always exits within SAFETY_TIMEOUT_MS.
+ * Stops Lenis while visible so the page cannot be scrolled under the overlay.
  */
 export default function LoadingScreen() {
   const [state, setState] = useState<LoadState>("loading");
@@ -27,6 +29,12 @@ export default function LoadingScreen() {
 
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
+    setLenisScrollLocked(true);
+
+    // Lenis may mount after this effect — re-assert lock briefly.
+    const relock = window.setInterval(() => {
+      if (!cancelled && !finished) setLenisScrollLocked(true);
+    }, 100);
 
     const minElapsed = new Promise<void>((resolve) => {
       window.setTimeout(resolve, MIN_LOAD_MS);
@@ -48,8 +56,10 @@ export default function LoadingScreen() {
     return () => {
       cancelled = true;
       clearTimeout(safetyTimer);
+      clearInterval(relock);
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
+      setLenisScrollLocked(false);
     };
   }, []);
 
@@ -58,6 +68,7 @@ export default function LoadingScreen() {
 
     document.documentElement.style.overflow = "";
     document.body.style.overflow = "";
+    setLenisScrollLocked(false);
 
     const doneTimer = window.setTimeout(() => setState("done"), EXIT_DURATION_MS);
     return () => clearTimeout(doneTimer);

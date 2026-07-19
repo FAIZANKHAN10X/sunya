@@ -76,9 +76,9 @@ component needs the **literal same** logic.
 - Dark-only palette; no theme toggle.
 - Mobile-first: base styles, then `sm:` / larger breakpoints.
 - Prefer deliberate spacing and type scales over one-off arbitrary values.
-- Do not add animation libraries. Existing CSS transitions for nav and small
-  UI (menu toggle, load screen, hero handoff) are intentional—do not expand
-  motion casually.
+- Do not add GSAP or Framer Motion. Lenis is already integrated for scroll feel.
+  Existing CSS transitions for nav and small UI (menu toggle, load screen, hero
+  handoff) are intentional—do not expand motion casually.
 
 ## Content and sections
 
@@ -106,8 +106,11 @@ component needs the **literal same** logic.
 
 - Application code lives under `src/`. There is no `src/hooks/` or `src/lib/`.
 - Prefer extending data files over duplicating components.
-- Do not add libraries for animation, smooth scroll, design systems, state,
-  CSS-in-JS, or CMS without an explicit product decision.
+- **Lenis** is the approved smooth-scroll library (wheel only; see
+  `SmoothScroll.tsx` / `lenisBridge.ts`). Do not add GSAP, Framer Motion, or a
+  second scroll library without an explicit product decision.
+- Do not add design systems, state libraries, CSS-in-JS, or CMS without an
+  explicit product decision.
 - Remove dead code when you touch related files.
 
 ## Deferred cleanup

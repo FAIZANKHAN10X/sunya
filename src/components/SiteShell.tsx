@@ -7,6 +7,7 @@ import NavigationPanel from "@/components/NavigationPanel";
 import NavigationProvider, {
   useNavigation,
 } from "@/components/NavigationContext";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const NAV_DURATION = 1000;
 const NAV_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
@@ -30,6 +31,7 @@ function SiteShellInner({ children }: SiteShellProps) {
 
   return (
     <div className="relative min-h-svh overflow-x-hidden bg-background">
+      <SmoothScroll />
       <HashScroll />
       <Header />
 

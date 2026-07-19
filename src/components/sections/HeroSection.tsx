@@ -2,6 +2,11 @@ import Container from "@/components/Container";
 import HeroScrollHint from "@/components/sections/HeroScrollHint";
 import VideoBackground from "@/components/VideoBackground";
 
+/**
+ * SECTION 01 — Identity Declaration
+ * Opening statement that immediately communicates the philosophy.
+ * Full-viewport hero with video atmosphere; keep id="hero" for video/scroll observers.
+ */
 export default function HeroSection() {
   return (
     <section
@@ -21,14 +26,20 @@ export default function HeroSection() {
       </div>
 
       <Container className="relative z-10 w-full py-28 sm:py-32">
+        <p className="mx-auto mb-8 max-w-xl text-center text-xs font-medium tracking-[0.28em] text-muted uppercase sm:mb-10">
+          A philosophy of healing
+        </p>
         <h1
           id="hero-heading"
           className="mx-auto max-w-4xl text-center text-4xl font-medium tracking-[-0.03em] text-foreground sm:text-5xl md:text-6xl lg:text-[4.75rem] lg:leading-[1.1]"
         >
-          Reclaim the space
+          Return to the quiet
           <br className="hidden sm:block" />
-          between your thoughts and your body.
+          that was always yours.
         </h1>
+        <p className="mx-auto mt-8 max-w-md text-center text-sm leading-relaxed text-muted sm:mt-10 sm:text-base">
+          Presence. Discipline. A life practiced from the inside out.
+        </p>
       </Container>
 
       <div className="absolute inset-x-0 bottom-8 z-10 flex justify-center sm:bottom-10">

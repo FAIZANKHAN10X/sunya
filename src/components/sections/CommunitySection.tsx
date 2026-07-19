@@ -4,31 +4,36 @@ import SectionShell from "@/components/SectionShell";
 
 const items = [
   {
-    title: "Shared rooms",
+    title: "Email list",
     description:
-      "In-person and virtual spaces held with the same calm tone, clear cues, and unhurried pacing.",
+      "Quiet notes and invitations—never noise. Reflections, openings, and the occasional gathering.",
   },
   {
-    title: "Guided series",
+    title: "Private community",
     description:
-      "Multi-week pathways that help you build confidence without racing toward outcomes.",
+      "A held circle for shared practice and sincere conversation. No performance, no hierarchy of cool.",
   },
   {
-    title: "Quiet mentorship",
+    title: "Events",
     description:
-      "Thoughtful feedback and optional check-ins for students who want support along the way.",
+      "Dialogues, live practice, and seasonal gatherings—spaces to meet the work in real time.",
   },
 ] as const;
 
+/**
+ * SECTION 07 — Community
+ * Future community touchpoints: list, private circle, and events.
+ * Stacked cards keep a calm, non-sales rhythm.
+ */
 export default function CommunitySection() {
   return (
     <SectionShell id="community" labelledBy="community-heading">
       <div className="grid w-full gap-14 lg:grid-cols-12 lg:items-center lg:gap-16">
         <SectionIntro
           id="community-heading"
-          label="Community"
-          heading="Practice together, without performance"
-          description="Sunya is built for people who value sincerity over spectacle. Come as you are—curious, tired, experienced, or entirely new."
+          label="Belonging"
+          heading="Community"
+          description="Practice deepens in company—when the room is sincere. These are the doors into that field."
           className="lg:col-span-5"
           descriptionClassName="max-w-lg"
         />
@@ -36,7 +41,7 @@ export default function CommunitySection() {
           {items.map((item) => (
             <li key={item.title}>
               <Card className="p-7 sm:flex sm:items-start sm:justify-between sm:gap-10 sm:p-8">
-                <h3 className="shrink-0 text-lg font-medium tracking-tight text-foreground sm:w-40 sm:text-xl">
+                <h3 className="shrink-0 text-lg font-medium tracking-tight text-foreground sm:w-44 sm:text-xl">
                   {item.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted sm:mt-0 sm:max-w-md sm:text-base">

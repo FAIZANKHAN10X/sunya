@@ -112,7 +112,7 @@ component needs the **literal same** logic.
 
 ## Deferred cleanup
 
-- `Button.tsx` is a reusable primitive currently used only by `ContactSection`.
+- `Button.tsx` is a reusable primitive currently used only by `BeginSection`.
   Leave it in place unless a deliberate code task inlines or reuses it. If a
   second consumer never appears, inlining may be considered later—confirm that
   `MenuButton`’s divergent styling stays intentional.

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Sunya",
   description:
-    "Sunya is a calm space for mindful movement, breath, and quiet presence.",
+    "Sunya is a personal philosophy of healing, presence, and quiet practice.",
 };
 
 export default function RootLayout({

@@ -10,7 +10,7 @@ export default function Footer() {
               Sunya
             </p>
             <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
-              A calm space for mindful movement, breath, and quiet presence.
+              A personal philosophy of healing, presence, and quiet practice.
             </p>
           </div>
           <p className="text-sm text-muted">© 2026 Sunya</p>

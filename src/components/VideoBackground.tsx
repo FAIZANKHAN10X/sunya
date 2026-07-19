@@ -79,7 +79,7 @@ export default function VideoBackground({ src, poster }: VideoBackgroundProps) {
           // Phase A: video → black as the Hero leaves.
           overlay.style.opacity = String(1 - smoothstep(t));
 
-          // Phase B: dissolve the black sheet so Philosophy eases in (no hard cut).
+          // Phase B: dissolve the black sheet so the next section eases in (no hard cut).
           const handoff = Math.min(1, t / HANDOFF_RATIO);
           root.style.opacity = String(smoothstep(handoff));
         }

@@ -24,7 +24,7 @@ src
 │   ├── favicon.ico
 │   ├── globals.css      # tokens + loading / scroll-hint / menu-toggle CSS
 │   ├── layout.tsx       # root HTML, fonts, metadata
-│   └── page.tsx         # homepage composition only
+│   └── page.tsx         # homepage composition only (narrative order)
 ├── components
 │   ├── Button.tsx
 │   ├── Card.tsx
@@ -40,14 +40,17 @@ src
 │   ├── SiteShell.tsx
 │   ├── VideoBackground.tsx
 │   └── sections/
-│       ├── HeroSection.tsx
+│       ├── HeroSection.tsx          # 01 Identity Declaration
 │       ├── HeroScrollHint.tsx
-│       ├── PhilosophySection.tsx
-│       ├── PracticeSection.tsx
-│       ├── BenefitsSection.tsx
-│       ├── JourneySection.tsx
-│       ├── CommunitySection.tsx
-│       ├── ContactSection.tsx
+│       ├── IntroductionSection.tsx  # 02 Introduction
+│       ├── TurningPointSection.tsx  # 03 The Turning Point
+│       ├── BeliefsSection.tsx       # 04 What I Believe
+│       ├── FrameworkSection.tsx     # 05 The Framework
+│       ├── NotesSection.tsx         # 06 Notes From The Path
+│       ├── CommunitySection.tsx     # 07 Community
+│       ├── ExperiencesSection.tsx   # 08 Practice & Experiences
+│       ├── StoriesSection.tsx       # 09 Stories of Change
+│       ├── BeginSection.tsx         # 10 Begin
 │       └── SectionIntro.tsx
 ├── data
 │   └── menu.ts           # nav / social / quick-link labels
@@ -67,12 +70,15 @@ page.tsx
           │      ├── Header → MenuButton
           │      ├── page surface (CSS transform when menu open)
           │      │      ├── HeroSection → VideoBackground, Container, HeroScrollHint
-          │      │      ├── PhilosophySection → SectionShell, SectionIntro
-          │      │      ├── PracticeSection   → SectionShell, SectionIntro
-          │      │      ├── BenefitsSection   → SectionShell, SectionIntro
-          │      │      ├── JourneySection    → SectionShell, SectionIntro
-          │      │      ├── CommunitySection  → SectionShell, SectionIntro, Card
-          │      │      ├── ContactSection    → SectionShell, SectionIntro, Button
+          │      │      ├── IntroductionSection → SectionShell, SectionIntro
+          │      │      ├── TurningPointSection → SectionShell, SectionIntro
+          │      │      ├── BeliefsSection      → SectionShell, SectionIntro
+          │      │      ├── FrameworkSection    → SectionShell, SectionIntro
+          │      │      ├── NotesSection        → SectionShell, SectionIntro
+          │      │      ├── CommunitySection    → SectionShell, SectionIntro, Card
+          │      │      ├── ExperiencesSection  → SectionShell, SectionIntro
+          │      │      ├── StoriesSection      → SectionShell, SectionIntro
+          │      │      ├── BeginSection        → SectionShell, Button
           │      │      └── Footer → Container
           │      └── NavigationPanel → data/menu → types/MenuItem
 ```
@@ -111,32 +117,35 @@ page.tsx
 | `SectionShell` | Full-viewport section frame + Container | Content sections except Hero | Yes |
 | `Container` | Max-width + gutters | SectionShell, HeroSection, Footer | Yes |
 | `SectionLabel` | Uppercase kicker | SectionIntro | Yes (via intro) |
-| `Button` | Primary/secondary button | ContactSection only | Reusable primitive, 1 consumer today |
+| `Button` | Primary/secondary button | BeginSection only | Reusable primitive, 1 consumer today |
 | `Card` | Bordered surface | Community only | Reusable primitive, 1 consumer today |
 | `Footer` | Brand + copyright | `page.tsx` | No |
-| `SectionIntro` | Label + h2 + description | Six content sections | Yes |
+| `SectionIntro` | Label + h2 + description | Most content sections | Yes |
 | `data/menu.ts` | Static nav labels | NavigationPanel | Data |
 | `types/index.ts` | `MenuItem` | `data/menu.ts` | Types |
 
 **Critical path:** `layout`, `page`, `SiteShell`, nav stack, Hero +
-`VideoBackground`, the six content sections, `Footer`, `globals.css`.
+`VideoBackground`, the nine content sections after hero, `Footer`, `globals.css`.
 
 **Helpers (local blast radius):** `Container`, `SectionShell`, `SectionIntro`,
 `SectionLabel`, `Card`, `Button`, `HeroScrollHint`.
 
 ## Section composition
 
-Stack order is fixed in `page.tsx`:
+Stack order is fixed in `page.tsx` as a **guided philosophy journey**:
 
-| Order | File | Role |
-| --- | --- | --- |
-| 1 | `HeroSection.tsx` | Full-viewport hero, video background, headline, scroll cue |
-| 2 | `PhilosophySection.tsx` | Principles (editorial list) |
-| 3 | `PracticeSection.tsx` | Practice offerings list |
-| 4 | `BenefitsSection.tsx` | Benefits grid |
-| 5 | `JourneySection.tsx` | Numbered path |
-| 6 | `CommunitySection.tsx` | Intro + stacked cards |
-| 7 | `ContactSection.tsx` | Details + CTA button |
+| Order | File | Role | Section `id` |
+| --- | --- | --- | --- |
+| 01 | `HeroSection.tsx` | Identity declaration — opening philosophy line + video | `hero` |
+| 02 | `IntroductionSection.tsx` | Founder intro + media placeholder | `introduction` |
+| 03 | `TurningPointSection.tsx` | Origin timeline (milestones) | `turning-point` |
+| 04 | `BeliefsSection.tsx` | Core philosophy cards | `beliefs` |
+| 05 | `FrameworkSection.tsx` | Signature methodology pillars | `framework` |
+| 06 | `NotesSection.tsx` | Essays / reflections grid (placeholders) | `notes` |
+| 07 | `CommunitySection.tsx` | List / circle / events placeholders | `community` |
+| 08 | `ExperiencesSection.tsx` | Programs, workshops, retreats | `experiences` |
+| 09 | `StoriesSection.tsx` | Testimonial / transformation placeholders | `stories` |
+| 10 | `BeginSection.tsx` | Minimal final invitation + CTA | `begin` |
 
 | Goal | Edit |
 | --- | --- |
@@ -146,6 +155,7 @@ Stack order is fixed in `page.tsx`:
 
 Each `*Section.tsx` is a page *chapter*, not a deep module. Hero is split
 further (`VideoBackground`, `HeroScrollHint`) because of real client lifecycle.
+Hero keeps `id="hero"` so video and scroll-hint observers stay stable.
 
 ## Design tokens
 

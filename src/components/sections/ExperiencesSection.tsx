@@ -1,42 +1,47 @@
 import SectionIntro from "@/components/sections/SectionIntro";
 import SectionShell from "@/components/SectionShell";
 
-const items = [
+const experiences = [
   {
-    title: "Morning flow",
-    meta: "Soft · 45 min",
+    title: "Programs",
+    meta: "Guided · Multi-week",
     description:
-      "Easy sequencing to wake the body and set a quieter tone for the day—nothing to achieve before breakfast.",
+      "Structured pathways for steady practice—rhythm you can keep, depth you can grow into.",
   },
   {
-    title: "Restorative stillness",
-    meta: "Supported · 60 min",
+    title: "Workshops",
+    meta: "Immersive · Day",
     description:
-      "Longer holds, props, and soft guidance. Built for recovery days when effort should be almost optional.",
+      "Focused sessions on a single theme: breath, stillness, embodiment, or the inner life.",
   },
   {
-    title: "Breath & meditation",
-    meta: "Seated · 30 min",
+    title: "Retreats",
+    meta: "Deep · Multi-day",
     description:
-      "Simple techniques, unhurried pacing. A short practice for when the mat feels like too much and sitting is enough.",
+      "Extended space for presence and rest. Time away from noise so the path can speak clearly.",
   },
 ] as const;
 
-export default function PracticeSection() {
+/**
+ * SECTION 08 — Practice & Experiences
+ * Future programs, workshops, retreats, and offerings.
+ * List layout preserves the editorial tone of the original practice section.
+ */
+export default function ExperiencesSection() {
   return (
-    <SectionShell id="practice" labelledBy="practice-heading">
+    <SectionShell id="experiences" labelledBy="experiences-heading">
       <div className="w-full">
         <SectionIntro
-          id="practice-heading"
+          id="experiences-heading"
           label="Practice"
-          heading="A practice that meets you where you are"
-          description="Pick the rhythm that fits the day. Structure when you need it, space when you don’t—intention over obligation."
+          heading="Practice & experiences"
+          description="Ways to meet the work when you are ready—alone is welcome; together is available."
           className="max-w-2xl"
           descriptionClassName="max-w-xl"
         />
 
         <ul className="mt-14 border-t border-border sm:mt-16">
-          {items.map((item) => (
+          {experiences.map((item) => (
             <li
               key={item.title}
               className="border-b border-border py-9 sm:py-10"

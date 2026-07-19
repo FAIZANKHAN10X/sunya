@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { trackGenerateLead } from "@/analytics/track";
 import Button from "@/components/Button";
 
 /**
@@ -13,6 +14,11 @@ export default function ContactForm() {
     event.preventDefault();
     setStatus("success");
     event.currentTarget.reset();
+    trackGenerateLead({
+      lead_type: "contact",
+      form_id: "contact_page",
+      form_name: "Contact",
+    });
   };
 
   if (status === "success") {

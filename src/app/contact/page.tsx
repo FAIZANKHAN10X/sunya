@@ -18,6 +18,7 @@ export default function ContactPage() {
     <SiteShell>
       <main>
         <section
+          id="contact"
           aria-labelledby="contact-heading"
           className="relative scroll-mt-20 pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24"
         >

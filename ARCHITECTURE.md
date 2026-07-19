@@ -13,8 +13,9 @@ addition.
 Next.js App Router + React + TypeScript + Tailwind CSS v4 + npm.
 
 Runtime dependencies: `next`, `react`, `react-dom`, and **`lenis`** (smooth
-wheel scroll only). No GSAP, Framer Motion, state library, CSS-in-JS, UI kit,
-or CMS. No `src/hooks/` or `src/lib/`.
+wheel scroll only). Analytics: **GTM + dataLayer** via `src/analytics/` (no
+direct GA4 `gtag` in app code). No GSAP, Framer Motion, state library,
+CSS-in-JS, UI kit, or CMS. No `src/hooks/` or `src/lib/`.
 
 ## Folder tree
 
@@ -23,10 +24,18 @@ src
 ├── app
 │   ├── favicon.ico
 │   ├── globals.css      # tokens + loading / scroll-hint / menu-toggle CSS
-│   ├── layout.tsx       # root HTML, fonts, metadata
+│   ├── layout.tsx       # root HTML, fonts, GTM, AnalyticsRoot, metadata
 │   ├── page.tsx         # homepage composition (narrative order)
 │   └── contact/
 │       └── page.tsx     # dedicated contact route
+├── analytics
+│   ├── track.ts              # dataLayer trackEvent + dedupe helpers
+│   ├── types.ts
+│   ├── GoogleTagManager.tsx
+│   ├── PageViewTracker.tsx
+│   ├── SectionViewTracker.tsx
+│   ├── TrackedCtaLink.tsx
+│   └── AnalyticsRoot.tsx
 ├── components
 │   ├── Button.tsx
 │   ├── Card.tsx

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import TrackedCtaLink from "@/analytics/TrackedCtaLink";
 import Container from "@/components/Container";
 import HeroScrollHint from "@/components/sections/HeroScrollHint";
 import VideoBackground from "@/components/VideoBackground";
@@ -44,18 +44,24 @@ export default function HeroSection() {
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:mt-11 sm:flex-row sm:items-center sm:gap-4">
-              <Link
+              <TrackedCtaLink
                 href="#introduction"
+                ctaId="hero_enter_path"
+                ctaText="Enter the path"
+                ctaLocation="hero"
                 className="inline-flex min-h-12 items-center justify-center rounded-soft bg-foreground px-7 text-sm font-medium tracking-[0.04em] text-background transition-opacity duration-300 hover:opacity-90 motion-reduce:transition-none active:scale-[0.98] sm:min-h-11"
               >
                 Enter the path
-              </Link>
-              <Link
+              </TrackedCtaLink>
+              <TrackedCtaLink
                 href="#framework"
+                ctaId="hero_framework"
+                ctaText="The framework"
+                ctaLocation="hero"
                 className="inline-flex min-h-12 items-center justify-center px-2 text-sm font-medium tracking-[0.06em] text-foreground underline-offset-4 transition-opacity duration-300 hover:opacity-70 motion-reduce:transition-none sm:min-h-11"
               >
                 The framework →
-              </Link>
+              </TrackedCtaLink>
             </div>
           </div>
 

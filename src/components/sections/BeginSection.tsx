@@ -1,4 +1,4 @@
-import Link from "next/link";
+import TrackedCtaLink from "@/analytics/TrackedCtaLink";
 import Container from "@/components/Container";
 
 /**
@@ -32,18 +32,24 @@ export default function BeginSection() {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:col-span-4 lg:flex-col lg:items-stretch xl:pl-8">
-            <Link
+            <TrackedCtaLink
               href="#newsletter"
+              ctaId="begin_join_list"
+              ctaText="Join the list"
+              ctaLocation="begin"
               className="inline-flex min-h-12 items-center justify-center rounded-soft bg-foreground px-7 text-sm font-medium tracking-[0.04em] text-background transition-opacity duration-300 hover:opacity-90 motion-reduce:transition-none active:scale-[0.98]"
             >
               Join the list
-            </Link>
-            <Link
+            </TrackedCtaLink>
+            <TrackedCtaLink
               href="/contact"
+              ctaId="begin_contact"
+              ctaText="Contact"
+              ctaLocation="begin"
               className="inline-flex min-h-12 items-center justify-center border border-border px-7 text-sm font-medium tracking-[0.04em] text-foreground transition-[border-color,background-color] duration-300 hover:border-foreground/35 hover:bg-surface motion-reduce:transition-none active:scale-[0.98]"
             >
               Contact
-            </Link>
+            </TrackedCtaLink>
           </div>
         </div>
       </Container>

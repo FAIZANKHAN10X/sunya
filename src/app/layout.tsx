@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import AnalyticsRoot from "@/analytics/AnalyticsRoot";
+import GoogleTagManager, {
+  GoogleTagManagerNoscript,
+} from "@/analytics/GoogleTagManager";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,7 +32,14 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-background text-foreground">{children}</body>
+      <head>
+        <GoogleTagManager />
+      </head>
+      <body className="min-h-full bg-background text-foreground">
+        <GoogleTagManagerNoscript />
+        <AnalyticsRoot />
+        {children}
+      </body>
     </html>
   );
 }

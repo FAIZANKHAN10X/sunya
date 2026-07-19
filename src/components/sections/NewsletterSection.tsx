@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { trackGenerateLead } from "@/analytics/track";
 import Button from "@/components/Button";
 import SectionShell from "@/components/SectionShell";
 
@@ -16,6 +17,11 @@ export default function NewsletterSection() {
     if (!email.trim()) return;
     setStatus("success");
     setEmail("");
+    trackGenerateLead({
+      lead_type: "newsletter",
+      form_id: "newsletter_homepage",
+      form_name: "Newsletter",
+    });
   };
 
   return (

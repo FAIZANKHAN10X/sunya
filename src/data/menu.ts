@@ -11,7 +11,11 @@ export const menuItems: MenuItem[] = [
 ];
 
 export const socialLinks: MenuItem[] = [
-  { id: "instagram", label: "Instagram" },
+  {
+    id: "instagram",
+    label: "Instagram",
+    href: "https://www.instagram.com/fznmco/",
+  },
   { id: "youtube", label: "YouTube" },
   { id: "x", label: "X" },
 ];

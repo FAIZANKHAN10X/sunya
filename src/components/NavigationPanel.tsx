@@ -114,14 +114,26 @@ export default function NavigationPanel() {
             <ul className="mt-4 flex flex-col gap-2.5">
               {socialLinks.map((item) => (
                 <li key={item.id}>
-                  <button
-                    type="button"
-                    disabled
-                    tabIndex={isOpen ? 0 : -1}
-                    className="cursor-default text-sm text-foreground/90 disabled:opacity-100"
-                  >
-                    {item.label}
-                  </button>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      tabIndex={isOpen ? 0 : -1}
+                      className="text-sm text-foreground/90 transition-opacity duration-300 hover:opacity-60 motion-reduce:transition-none"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      tabIndex={isOpen ? 0 : -1}
+                      className="cursor-default text-sm text-foreground/90 disabled:opacity-100"
+                    >
+                      {item.label}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>

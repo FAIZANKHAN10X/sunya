@@ -1,4 +1,3 @@
-import SectionIntro from "@/components/sections/SectionIntro";
 import SectionShell from "@/components/SectionShell";
 
 const pillars = [
@@ -30,25 +29,27 @@ const pillars = [
 ] as const;
 
 /**
- * SECTION 05 — The Framework
- * Signature methodology as five premium pillars.
- * Editorial numbered list—signature system, not a product feature grid.
+ * The Framework — five pillars as a full-width instrument panel.
  */
 export default function FrameworkSection() {
   return (
-    <SectionShell id="framework" labelledBy="framework-heading">
+    <SectionShell
+      id="framework"
+      labelledBy="framework-heading"
+      density="scene"
+      tone="surface"
+    >
       <div className="w-full">
-        <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-16">
-          <SectionIntro
+        <div className="max-w-2xl">
+          <h2
             id="framework-heading"
-            label="Methodology"
-            heading="The framework"
-            description="Five pillars of a lived system. Practice moves through each—never as a checklist, always as a whole."
-            className="lg:col-span-7"
-            descriptionClassName="max-w-md"
-          />
-          <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase lg:col-span-5 lg:text-right">
-            05 pillars · one practice
+            className="max-w-[12ch] text-[2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-4xl lg:text-5xl"
+          >
+            The framework
+          </h2>
+          <p className="mt-6 max-w-md text-sm leading-relaxed text-muted sm:text-base">
+            Five pillars of a lived system. Practice moves through each—never as
+            a checklist, always as a whole.
           </p>
         </div>
 

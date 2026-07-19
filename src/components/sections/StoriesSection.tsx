@@ -1,4 +1,3 @@
-import SectionIntro from "@/components/sections/SectionIntro";
 import SectionShell from "@/components/SectionShell";
 
 const stories = [
@@ -23,62 +22,70 @@ const stories = [
 ] as const;
 
 /**
- * SECTION 09 — Stories of Change
- * Testimonials and transformation stories.
- * Quiet quote cards—witness, not marketing claims. Swap for real voices later.
+ * Stories of Change — featured witness + supporting voices.
  */
 export default function StoriesSection() {
-  return (
-    <SectionShell id="stories" labelledBy="stories-heading">
-      <div className="w-full">
-        <SectionIntro
-          id="stories-heading"
-          label="Witness"
-          heading="Stories of change"
-          description="Voices from people who walked the path—shared with care, not as proof."
-          className="max-w-2xl"
-          descriptionClassName="max-w-xl"
-        />
+  const [featured, ...rest] = stories;
 
-        <ul className="mt-10 grid gap-3 sm:mt-14 sm:gap-4 lg:mt-16 lg:grid-cols-3">
-          {stories.map((item, index) => (
+  return (
+    <SectionShell id="stories" labelledBy="stories-heading" density="scene">
+      <div className="w-full">
+        <div className="max-w-2xl">
+          <h2
+            id="stories-heading"
+            className="text-[2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-4xl lg:text-5xl"
+          >
+            Stories of change
+          </h2>
+          <p className="mt-5 max-w-md text-sm leading-relaxed text-muted sm:text-base">
+            Voices from people who walked the path—shared with care, not as
+            proof.
+          </p>
+        </div>
+
+        <figure className="mt-12 border-t border-border pt-10 sm:mt-16 sm:pt-14 lg:grid lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-2">
+            <span
+              className="font-serif text-6xl leading-none text-foreground/20 select-none sm:text-7xl"
+              aria-hidden="true"
+            >
+              “
+            </span>
+          </div>
+          <div className="lg:col-span-9">
+            <blockquote className="text-xl font-medium leading-[1.35] tracking-tight text-foreground sm:text-2xl lg:text-[1.85rem] lg:leading-[1.35]">
+              {featured.quote}
+            </blockquote>
+            <figcaption className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-border pt-6 sm:mt-10">
+              <p className="text-sm font-medium tracking-tight text-foreground">
+                {featured.name}
+              </p>
+              <p className="text-xs font-medium tracking-[0.14em] text-muted uppercase">
+                {featured.detail}
+              </p>
+            </figcaption>
+          </div>
+        </figure>
+
+        <ul className="mt-10 grid gap-0 border-t border-border sm:mt-14 md:grid-cols-2">
+          {rest.map((item, index) => (
             <li
               key={item.quote}
-              className={index === 0 ? "lg:col-span-1" : undefined}
+              className={`border-border py-8 sm:py-10 ${
+                index === 0 ? "md:border-r md:pr-10" : "md:pl-10"
+              } border-b md:border-b-0`}
             >
-              <figure
-                className={`relative flex h-full flex-col rounded-soft border border-border p-6 sm:p-8 ${
-                  index === 1
-                    ? "bg-surface lg:mt-10"
-                    : index === 2
-                      ? "lg:mt-5"
-                      : "bg-transparent"
-                }`}
-              >
-                <span
-                  className="font-serif text-5xl leading-none text-foreground/15 select-none"
-                  aria-hidden="true"
-                >
-                  “
-                </span>
-                <blockquote className="mt-4 flex-1 text-base leading-relaxed text-foreground sm:text-lg">
-                  {item.quote}
+              <figure>
+                <blockquote className="text-base leading-relaxed text-foreground sm:text-lg">
+                  “{item.quote}”
                 </blockquote>
-                <figcaption className="mt-10 flex items-end justify-between gap-4 border-t border-border pt-6">
-                  <div>
-                    <p className="text-sm font-medium tracking-tight text-foreground">
-                      {item.name}
-                    </p>
-                    <p className="mt-1 text-xs font-medium tracking-[0.14em] text-muted uppercase">
-                      {item.detail}
-                    </p>
-                  </div>
-                  <span
-                    className="text-xs font-medium tracking-[0.14em] text-muted/50 tabular-nums"
-                    aria-hidden="true"
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+                <figcaption className="mt-6 flex items-center gap-4">
+                  <p className="text-sm font-medium text-foreground">
+                    {item.name}
+                  </p>
+                  <p className="text-xs font-medium tracking-[0.12em] text-muted uppercase">
+                    {item.detail}
+                  </p>
                 </figcaption>
               </figure>
             </li>

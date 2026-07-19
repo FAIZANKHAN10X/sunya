@@ -204,6 +204,21 @@ body {
   transform: translateY(0) rotate(-45deg);
 }
 
+/* —— Navigation panel link reveal —— */
+
+.nav-panel-item {
+  opacity: 0;
+  transform: translateY(0.4rem);
+  transition:
+    opacity 500ms var(--ease-premium),
+    transform 500ms var(--ease-premium);
+}
+
+.nav-panel-item[data-open="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .loading-screen,
   .loading-screen__mark,
@@ -211,8 +226,14 @@ body {
   .loading-screen__caption,
   .hero-scroll-hint,
   .menu-toggle__label,
-  .menu-toggle__line {
+  .menu-toggle__line,
+  .nav-panel-item {
     animation: none !important;
     transition: none !important;
+  }
+
+  .nav-panel-item {
+    opacity: 1;
+    transform: none;
   }
 }

@@ -22,18 +22,12 @@ const experiences = [
   },
 ] as const;
 
-/**
- * SECTION 08 — Practice & Experiences
- * Future programs, workshops, retreats, and offerings.
- * Tall panel cards with quiet meta labels.
- */
 export default function ExperiencesSection() {
   return (
     <SectionShell id="experiences" labelledBy="experiences-heading">
       <div className="w-full">
         <SectionIntro
           id="experiences-heading"
-          label="Practice"
           heading="Practice & experiences"
           description="Ways to meet the work when you are ready—alone is welcome; together is available."
           className="max-w-2xl"
@@ -64,13 +58,6 @@ export default function ExperiencesSection() {
                     {item.description}
                   </p>
                 </div>
-
-                <span
-                  className="pointer-events-none absolute -right-2 -bottom-4 hidden text-[8rem] font-medium leading-none tracking-tighter text-foreground/[0.03] transition-colors duration-300 group-hover:text-foreground/[0.06] select-none sm:block"
-                  aria-hidden="true"
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
               </article>
             </li>
           ))}

@@ -10,8 +10,7 @@ const NAV_DURATION = 1000;
 const NAV_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
 /**
- * Right navigation surface.
- * Primary links scroll to homepage sections; quick links may route off-page.
+ * Right navigation surface — brand theater, not a utility drawer.
  */
 export default function NavigationPanel() {
   const { isOpen, close, panelRef, scrollToSection } = useNavigation();
@@ -53,7 +52,7 @@ export default function NavigationPanel() {
     <aside
       ref={panelRef}
       id="navigation-panel"
-      className="fixed top-0 right-0 z-30 flex h-svh w-[min(88vw,22rem)] flex-col bg-background sm:w-[min(88vw,28rem)] md:w-[min(38vw,28rem)]"
+      className="fixed top-0 right-0 z-30 flex h-svh w-[min(92vw,24rem)] flex-col border-l border-border/80 bg-background sm:w-[min(88vw,30rem)] md:w-[min(42vw,32rem)]"
       style={panelStyle}
       aria-hidden={!isOpen}
       aria-label="Site navigation"
@@ -61,44 +60,65 @@ export default function NavigationPanel() {
       <div className="h-16 shrink-0 sm:h-20" aria-hidden="true" />
 
       <div className="flex min-h-0 flex-1 flex-col justify-between overflow-y-auto overscroll-contain px-6 pb-8 sm:px-10 sm:pb-10 lg:px-12">
-        <nav aria-label="Primary" className="pt-4 sm:pt-8">
-          <ul className="flex flex-col gap-0.5 sm:gap-1">
-            {menuItems.map((item, index) => (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  tabIndex={isOpen ? 0 : -1}
-                  onClick={() => handleItem(item)}
-                  className="group flex w-full cursor-pointer items-baseline gap-4 py-2.5 text-left transition-opacity duration-300 hover:opacity-70 motion-reduce:transition-none sm:py-3"
-                >
-                  <span
-                    className="w-6 shrink-0 text-[0.65rem] font-medium tracking-[0.16em] text-muted tabular-nums"
-                    aria-hidden="true"
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span className="text-2xl font-medium tracking-tight text-foreground sm:text-3xl lg:text-[2.5rem]">
-                    {item.label}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <div>
+          <p
+            className={`text-[0.65rem] font-medium tracking-[0.22em] text-muted uppercase transition-opacity duration-500 ${
+              isOpen ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            Index
+          </p>
 
-        <div className="grid grid-cols-2 gap-8 pt-10">
+          <nav aria-label="Primary" className="mt-6 sm:mt-8">
+            <ul className="flex flex-col">
+              {menuItems.map((item, index) => (
+                <li
+                  key={item.id}
+                  className="nav-panel-item border-t border-border/80 last:border-b"
+                  style={
+                    isOpen
+                      ? {
+                          transitionDelay: `${80 + index * 45}ms`,
+                        }
+                      : undefined
+                  }
+                  data-open={isOpen ? "true" : "false"}
+                >
+                  <button
+                    type="button"
+                    tabIndex={isOpen ? 0 : -1}
+                    onClick={() => handleItem(item)}
+                    className="group flex w-full cursor-pointer items-baseline justify-between gap-4 py-4 text-left sm:py-5"
+                  >
+                    <span className="text-2xl font-medium tracking-tight text-foreground transition-opacity duration-300 group-hover:opacity-60 motion-reduce:transition-none sm:text-3xl lg:text-[2.35rem]">
+                      {item.label}
+                    </span>
+                    <span
+                      className="text-[0.65rem] font-medium tracking-[0.16em] text-muted tabular-nums"
+                      aria-hidden="true"
+                    >
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        <div className="grid grid-cols-2 gap-8 border-t border-border/80 pt-8">
           <div>
             <p className="text-[0.65rem] font-medium tracking-[0.22em] text-muted uppercase">
               Socials
             </p>
-            <ul className="mt-4 flex flex-col gap-2">
+            <ul className="mt-4 flex flex-col gap-2.5">
               {socialLinks.map((item) => (
                 <li key={item.id}>
                   <button
                     type="button"
                     disabled
                     tabIndex={isOpen ? 0 : -1}
-                    className="cursor-default text-sm text-foreground disabled:opacity-100"
+                    className="cursor-default text-sm text-foreground/90 disabled:opacity-100"
                   >
                     {item.label}
                   </button>
@@ -110,14 +130,14 @@ export default function NavigationPanel() {
             <p className="text-[0.65rem] font-medium tracking-[0.22em] text-muted uppercase">
               More
             </p>
-            <ul className="mt-4 flex flex-col gap-2">
+            <ul className="mt-4 flex flex-col gap-2.5">
               {quickLinks.map((item) => (
                 <li key={item.id}>
                   <button
                     type="button"
                     tabIndex={isOpen ? 0 : -1}
                     onClick={() => handleItem(item)}
-                    className="cursor-pointer text-sm text-foreground transition-opacity duration-300 hover:opacity-70 motion-reduce:transition-none"
+                    className="cursor-pointer text-sm text-foreground/90 transition-opacity duration-300 hover:opacity-60 motion-reduce:transition-none"
                   >
                     {item.label}
                   </button>

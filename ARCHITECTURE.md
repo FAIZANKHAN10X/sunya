@@ -46,14 +46,14 @@ src
 │       ├── HeroSection.tsx          # 01 Identity Declaration
 │       ├── HeroScrollHint.tsx
 │       ├── IntroductionSection.tsx  # 02 Introduction
-│       ├── TurningPointSection.tsx  # 03 The Turning Point
-│       ├── BeliefsSection.tsx       # 04 What I Believe
-│       ├── FrameworkSection.tsx     # 05 The Framework
-│       ├── NotesSection.tsx         # 06 Notes From The Path
-│       ├── CommunitySection.tsx     # 07 Community
-│       ├── ExperiencesSection.tsx   # 08 Practice & Experiences
-│       ├── StoriesSection.tsx       # 09 Stories of Change
-│       ├── BeginSection.tsx         # 10 Begin
+│       ├── MediaChapterSection.tsx  # visual field / gallery
+│       ├── BeliefsSection.tsx
+│       ├── FrameworkSection.tsx
+│       ├── NotesSection.tsx
+│       ├── CommunitySection.tsx
+│       ├── ExperiencesSection.tsx
+│       ├── StoriesSection.tsx
+│       ├── BeginSection.tsx
 │       ├── NewsletterSection.tsx    # above footer
 │       ├── ContactForm.tsx          # /contact form
 │       └── SectionIntro.tsx
@@ -125,7 +125,7 @@ contact/page.tsx
 | `VideoBackground` | Fixed hero video, fade, handoff, pause/restart | HeroSection | No |
 | `SectionShell` | Section frame + Container; compact density option | Content sections | Yes |
 | `Container` | Max-width + gutters | SectionShell, Hero, Footer, contact | Yes |
-| `SectionLabel` | Uppercase kicker | SectionIntro | Yes (via intro) |
+| `SectionLabel` | Uppercase kicker | Available (unused by intros) | Primitive |
 | `Button` | Primary/secondary control | Newsletter, ContactForm | Reusable primitive |
 | `Card` | Bordered surface | Available | Reusable primitive |
 | `Footer` | Brand, copyright, Contact + Newsletter links | Home + contact | No |
@@ -139,17 +139,17 @@ Stack order is fixed in `page.tsx` as a **guided philosophy journey**:
 
 | Order | File | Role | Section `id` |
 | --- | --- | --- | --- |
-| 01 | `HeroSection.tsx` | Identity declaration | `hero` |
-| 02 | `IntroductionSection.tsx` | Founder intro + media placeholder | `introduction` |
-| 03 | `TurningPointSection.tsx` | Origin timeline | `turning-point` |
-| 04 | `BeliefsSection.tsx` | Core philosophy cards | `beliefs` |
-| 05 | `FrameworkSection.tsx` | Signature methodology pillars | `framework` |
-| 06 | `NotesSection.tsx` | Essays / reflections grid | `notes` |
-| 07 | `CommunitySection.tsx` | Community doors | `community` |
-| 08 | `ExperiencesSection.tsx` | Programs, workshops, retreats | `experiences` |
-| 09 | `StoriesSection.tsx` | Transformation stories | `stories` |
-| 10 | `BeginSection.tsx` | Closing invitation | `begin` |
-| — | `NewsletterSection.tsx` | Email signup above footer | `newsletter` |
+| 01 | `HeroSection.tsx` | Cinematic identity + CTAs | `hero` |
+| 02 | `IntroductionSection.tsx` | Founder intro + media | `introduction` |
+| — | `MediaChapterSection.tsx` | Visual gallery chapter | `presence` |
+| 03 | `BeliefsSection.tsx` | Editorial philosophy list | `beliefs` |
+| 04 | `FrameworkSection.tsx` | Methodology pillars | `framework` |
+| 05 | `NotesSection.tsx` | Essays / reflections grid | `notes` |
+| 06 | `CommunitySection.tsx` | Community doors + media | `community` |
+| 07 | `ExperiencesSection.tsx` | Programs, workshops, retreats | `experiences` |
+| 08 | `StoriesSection.tsx` | Featured + supporting witnesses | `stories` |
+| 09 | `BeginSection.tsx` | Full-scene invitation | `begin` |
+| — | `NewsletterSection.tsx` | Editorial email capture | `newsletter` |
 
 Contact is **not** a homepage section; it lives at `/contact`.
 
@@ -177,9 +177,9 @@ Defined in `src/app/globals.css`:
 | `--ease-premium` / related durations | Shared motion easing |
 | `--header-offset` | `scroll-padding-top` for fixed header |
 
-Default container: wide max-width with responsive horizontal padding. Content
-sections use `SectionShell` — content-led height on mobile, `md:min-h-svh` on
-larger screens. Separation is spacing and composition.
+Default container: near full-bleed (`max-w-[100rem]`) with responsive horizontal
+padding. Content sections use `SectionShell` — content-led height on mobile,
+`md:min-h-svh` on larger screens. Separation is spacing and composition.
 
 ## Data / state flow
 

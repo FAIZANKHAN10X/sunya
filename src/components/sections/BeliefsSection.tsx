@@ -1,4 +1,3 @@
-import SectionIntro from "@/components/sections/SectionIntro";
 import SectionShell from "@/components/SectionShell";
 
 const beliefs = [
@@ -30,71 +29,49 @@ const beliefs = [
 ] as const;
 
 /**
- * SECTION 04 — What I Believe
- * Core philosophy expressed as calm editorial cards.
+ * What I Believe — editorial list, no section kicker labels.
  */
 export default function BeliefsSection() {
   return (
-    <SectionShell id="beliefs" labelledBy="beliefs-heading">
-      <div className="w-full">
-        <SectionIntro
-          id="beliefs-heading"
-          label="Philosophy"
-          heading="What I believe"
-          description="A few ideas hold the whole of this work. They are simple enough to remember—and deep enough to live."
-          className="max-w-2xl"
-          descriptionClassName="max-w-xl"
-        />
+    <SectionShell id="beliefs" labelledBy="beliefs-heading" density="scene">
+      <div className="grid w-full gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start">
+          <h2
+            id="beliefs-heading"
+            className="max-w-[10ch] text-[2rem] font-medium leading-[1.08] tracking-tight text-foreground sm:text-4xl lg:text-[2.75rem] xl:text-5xl"
+          >
+            What I believe
+          </h2>
+          <p className="mt-6 max-w-sm text-sm leading-relaxed text-muted sm:text-base">
+            A few ideas hold the whole of this work. Simple enough to
+            remember—deep enough to live.
+          </p>
+        </div>
 
-        <ul className="mt-10 grid gap-3 sm:mt-14 sm:grid-cols-2 lg:mt-16 lg:grid-cols-6 lg:gap-4">
-          {beliefs.map((item, index) => {
-            const isFeatured = index === 0;
-            return (
-              <li
-                key={item.title}
-                className={
-                  isFeatured
-                    ? "sm:col-span-2 lg:col-span-3 lg:row-span-2"
-                    : "lg:col-span-3"
-                }
-              >
-                <article
-                  className={`group relative flex h-full flex-col overflow-hidden rounded-soft border border-border bg-surface/40 p-6 transition-[border-color,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-foreground/20 hover:bg-surface motion-reduce:transition-none sm:p-8 ${
-                    isFeatured ? "lg:min-h-[22rem] lg:justify-between lg:p-10" : ""
-                  }`}
+        <ul className="lg:col-span-8">
+          {beliefs.map((item, index) => (
+            <li
+              key={item.title}
+              className="group border-t border-border py-8 last:border-b last:pb-8 sm:py-10"
+            >
+              <article className="grid gap-4 sm:grid-cols-[5.5rem_1fr] sm:gap-8 lg:grid-cols-[6.5rem_1fr] lg:items-baseline lg:gap-10">
+                <span
+                  className="text-3xl font-medium tracking-tight text-foreground/20 tabular-nums transition-colors duration-300 group-hover:text-foreground/45 motion-reduce:transition-none sm:text-4xl lg:text-5xl"
+                  aria-hidden="true"
                 >
-                  <span
-                    className={`font-medium tracking-[0.14em] text-muted/50 tabular-nums transition-colors duration-300 group-hover:text-muted ${
-                      isFeatured
-                        ? "text-3xl sm:text-5xl lg:text-6xl"
-                        : "text-xs"
-                    }`}
-                    aria-hidden="true"
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <div className={isFeatured ? "mt-8 sm:mt-auto sm:pt-12 lg:pt-16" : "mt-6 sm:mt-8"}>
-                    <h3
-                      className={`font-medium tracking-tight text-foreground ${
-                        isFeatured ? "text-xl sm:text-3xl" : "text-lg sm:text-xl"
-                      }`}
-                    >
-                      {item.title}
-                    </h3>
-                    <p
-                      className={`mt-3 leading-relaxed text-muted ${
-                        isFeatured
-                          ? "max-w-md text-sm sm:text-lg"
-                          : "text-sm sm:text-base"
-                      }`}
-                    >
-                      {item.description}
-                    </p>
-                  </div>
-                </article>
-              </li>
-            );
-          })}
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="min-w-0">
+                  <h3 className="text-xl font-medium tracking-tight text-foreground sm:text-2xl lg:text-[1.75rem]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 max-w-md text-sm leading-relaxed text-muted sm:mt-4 sm:text-base">
+                    {item.description}
+                  </p>
+                </div>
+              </article>
+            </li>
+          ))}
         </ul>
       </div>
     </SectionShell>

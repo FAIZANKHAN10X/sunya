@@ -22,18 +22,12 @@ const notes = [
   },
 ] as const;
 
-/**
- * SECTION 06 — Notes From The Path
- * Future essays, reflections, articles, and insights.
- * Content grid ready for real editorial links later.
- */
 export default function NotesSection() {
   return (
     <SectionShell id="notes" labelledBy="notes-heading">
       <div className="w-full">
         <SectionIntro
           id="notes-heading"
-          label="Writing"
           heading="Notes from the path"
           description="Essays and field notes from practice—written for clarity, not performance."
           className="max-w-2xl"
@@ -42,7 +36,10 @@ export default function NotesSection() {
 
         <ul className="mt-10 grid gap-3 sm:mt-14 sm:grid-cols-2 sm:gap-4 lg:mt-16 lg:grid-cols-3">
           {notes.map((item, index) => (
-            <li key={item.title} className={index === 0 ? "sm:col-span-2 lg:col-span-1" : ""}>
+            <li
+              key={item.title}
+              className={index === 0 ? "sm:col-span-2 lg:col-span-1" : ""}
+            >
               <article className="group flex h-full flex-col rounded-soft border border-border bg-surface/30 p-6 transition-[border-color,background-color,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-foreground/20 hover:bg-surface sm:hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:p-8">
                 <div className="flex items-center justify-between gap-4">
                   <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">

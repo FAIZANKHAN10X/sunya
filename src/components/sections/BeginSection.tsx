@@ -1,59 +1,52 @@
 import Link from "next/link";
-import SectionShell from "@/components/SectionShell";
-
-const primaryLinkClass =
-  "inline-flex min-h-11 w-full items-center justify-center rounded-soft bg-foreground px-6 py-3 text-sm font-medium tracking-[0.04em] text-background transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] touch-manipulation hover:opacity-90 motion-reduce:transition-none active:scale-[0.98] sm:w-auto sm:px-7 sm:py-3.5";
-
-const secondaryLinkClass =
-  "inline-flex min-h-11 w-full items-center justify-center rounded-soft border border-border bg-transparent px-6 py-3 text-sm font-medium tracking-[0.04em] text-foreground transition-[transform,border-color,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] touch-manipulation hover:border-foreground/40 hover:bg-surface motion-reduce:transition-none active:scale-[0.98] sm:w-auto sm:px-7 sm:py-3.5";
+import Container from "@/components/Container";
 
 /**
- * SECTION 10 — Begin
- * Final emotional call-to-action on the homepage journey.
- * Minimal invitation; contact lives on its own page.
+ * Begin — full-scene invitation without section name kickers.
  */
 export default function BeginSection() {
   return (
-    <SectionShell id="begin" labelledBy="begin-heading" density="compact">
-      <div className="relative w-full overflow-hidden rounded-soft border border-border">
-        <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(245,245,245,0.05)_0%,transparent_55%)]"
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent"
-          aria-hidden="true"
-        />
+    <section
+      id="begin"
+      aria-labelledby="begin-heading"
+      className="relative flex min-h-[85svh] scroll-mt-20 items-center overflow-hidden border-t border-border/60 sm:scroll-mt-24 md:min-h-svh"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_120%,rgba(245,245,245,0.06)_0%,transparent_55%)]"
+        aria-hidden="true"
+      />
 
-        <div className="relative mx-auto flex max-w-2xl flex-col items-center px-5 py-14 text-center sm:px-10 sm:py-20 lg:py-24">
-          <div className="flex items-center gap-4">
-            <span className="h-px w-6 bg-border" aria-hidden="true" />
-            <p className="text-xs font-medium tracking-[0.22em] text-muted uppercase">
-              Begin
+      <Container className="relative w-full py-20 sm:py-24 lg:py-28">
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-end lg:gap-8">
+          <div className="lg:col-span-8">
+            <h2
+              id="begin-heading"
+              className="max-w-[12ch] text-[2.5rem] font-medium leading-[1.02] tracking-[-0.03em] text-foreground sm:text-5xl sm:leading-[1.02] lg:text-6xl xl:text-[4.5rem]"
+            >
+              The path opens here.
+            </h2>
+            <p className="mt-6 max-w-md text-base leading-relaxed text-muted sm:mt-8 sm:text-lg">
+              No rush. No performance. When you are ready, take the next quiet
+              step—join the list or write a note.
             </p>
-            <span className="h-px w-6 bg-border" aria-hidden="true" />
           </div>
 
-          <h2
-            id="begin-heading"
-            className="mt-6 text-3xl font-medium tracking-tight text-foreground sm:mt-8 sm:text-4xl lg:text-5xl lg:leading-[1.1]"
-          >
-            The path opens here.
-          </h2>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-muted sm:mt-6 sm:text-lg">
-            No rush. No performance. When you are ready, take the next quiet
-            step—join the list or write a note.
-          </p>
-          <div className="mt-10 flex w-full flex-col items-stretch gap-3 sm:mt-12 sm:w-auto sm:flex-row sm:items-center">
-            <Link href="#newsletter" className={primaryLinkClass}>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:col-span-4 lg:flex-col lg:items-stretch xl:pl-8">
+            <Link
+              href="#newsletter"
+              className="inline-flex min-h-12 items-center justify-center rounded-soft bg-foreground px-7 text-sm font-medium tracking-[0.04em] text-background transition-opacity duration-300 hover:opacity-90 motion-reduce:transition-none active:scale-[0.98]"
+            >
               Join the list
             </Link>
-            <Link href="/contact" className={secondaryLinkClass}>
+            <Link
+              href="/contact"
+              className="inline-flex min-h-12 items-center justify-center border border-border px-7 text-sm font-medium tracking-[0.04em] text-foreground transition-[border-color,background-color] duration-300 hover:border-foreground/35 hover:bg-surface motion-reduce:transition-none active:scale-[0.98]"
+            >
               Contact
             </Link>
           </div>
         </div>
-      </div>
-    </SectionShell>
+      </Container>
+    </section>
   );
 }

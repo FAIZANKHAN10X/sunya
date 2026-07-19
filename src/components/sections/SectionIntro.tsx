@@ -1,8 +1,5 @@
-import SectionLabel from "@/components/SectionLabel";
-
 type SectionIntroProps = {
   id: string;
-  label: string;
   heading: string;
   description: string;
   className?: string;
@@ -10,9 +7,9 @@ type SectionIntroProps = {
   descriptionClassName?: string;
 };
 
+/** Section heading + description only — no kicker labels. */
 export default function SectionIntro({
   id,
-  label,
   heading,
   description,
   className = "",
@@ -21,16 +18,9 @@ export default function SectionIntro({
 }: SectionIntroProps) {
   return (
     <div className={className}>
-      <div className="flex items-center gap-4">
-        <SectionLabel>{label}</SectionLabel>
-        <span
-          className="h-px w-8 bg-border sm:w-10"
-          aria-hidden="true"
-        />
-      </div>
       <h2
         id={id}
-        className={`mt-4 text-[1.75rem] font-medium leading-[1.15] tracking-tight text-foreground sm:mt-5 sm:text-4xl sm:leading-[1.12] lg:text-[2.75rem] xl:text-5xl ${headingClassName}`}
+        className={`text-[1.75rem] font-medium leading-[1.15] tracking-tight text-foreground sm:text-4xl sm:leading-[1.12] lg:text-[2.75rem] xl:text-5xl ${headingClassName}`}
       >
         {heading}
       </h2>

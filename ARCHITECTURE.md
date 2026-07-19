@@ -24,12 +24,15 @@ src
 │   ├── favicon.ico
 │   ├── globals.css      # tokens + loading / scroll-hint / menu-toggle CSS
 │   ├── layout.tsx       # root HTML, fonts, metadata
-│   └── page.tsx         # homepage composition only (narrative order)
+│   ├── page.tsx         # homepage composition (narrative order)
+│   └── contact/
+│       └── page.tsx     # dedicated contact route
 ├── components
 │   ├── Button.tsx
 │   ├── Card.tsx
 │   ├── Container.tsx
 │   ├── Footer.tsx
+│   ├── HashScroll.tsx   # /#section deep-link handler
 │   ├── Header.tsx
 │   ├── LoadingScreen.tsx
 │   ├── MenuButton.tsx
@@ -51,6 +54,8 @@ src
 │       ├── ExperiencesSection.tsx   # 08 Practice & Experiences
 │       ├── StoriesSection.tsx       # 09 Stories of Change
 │       ├── BeginSection.tsx         # 10 Begin
+│       ├── NewsletterSection.tsx    # above footer
+│       ├── ContactForm.tsx          # /contact form
 │       └── SectionIntro.tsx
 ├── data
 │   └── menu.ts           # nav / social / quick-link labels
@@ -58,29 +63,28 @@ src
     └── index.ts           # MenuItem
 ```
 
-Single route: `/` (`src/app/page.tsx`).
+Routes: `/` (homepage), `/contact` (contact).
 
 ## Dependency flow
 
 ```text
-page.tsx
-   ├── LoadingScreen               (fixed overlay, then unmounts)
+page.tsx (/)
+   ├── LoadingScreen
    └── SiteShell
-          ├── NavigationProvider   (wraps the whole shell)
+          ├── NavigationProvider
+          │      ├── HashScroll
           │      ├── Header → MenuButton
-          │      ├── page surface (CSS transform when menu open)
+          │      ├── page surface
           │      │      ├── HeroSection → VideoBackground, Container, HeroScrollHint
-          │      │      ├── IntroductionSection → SectionShell, SectionIntro
-          │      │      ├── TurningPointSection → SectionShell, SectionIntro
-          │      │      ├── BeliefsSection      → SectionShell, SectionIntro
-          │      │      ├── FrameworkSection    → SectionShell, SectionIntro
-          │      │      ├── NotesSection        → SectionShell, SectionIntro
-          │      │      ├── CommunitySection    → SectionShell, SectionIntro
-          │      │      ├── ExperiencesSection  → SectionShell, SectionIntro
-          │      │      ├── StoriesSection      → SectionShell, SectionIntro
-          │      │      ├── BeginSection        → SectionShell, Button
+          │      │      ├── IntroductionSection → SectionShell, …
+          │      │      ├── … journey sections …
+          │      │      ├── BeginSection
+          │      │      ├── NewsletterSection → Button
           │      │      └── Footer → Container
           │      └── NavigationPanel → data/menu → types/MenuItem
+
+contact/page.tsx
+   └── SiteShell → ContactForm, Footer
 ```
 
 **Rules this encodes:**
@@ -93,42 +97,41 @@ page.tsx
 
 ## Navigation (actual implementation)
 
-- **State:** `NavigationContext` — `isOpen`, `toggle` / `close`, panel width,
-  page/panel refs, body scroll lock, Escape-to-close.
+- **State:** `NavigationContext` — `isOpen`, `toggle` / `close`,
+  `scrollToSection`, panel width, page/panel refs, body scroll lock,
+  Escape-to-close.
 - **Motion:** CSS only. `SiteShell` applies `transform` / `border-radius`
   transitions on the page surface while open; `NavigationPanel` slides with a
   CSS `transform` transition. Menu control morph is CSS in `globals.css`
   (`.menu-toggle`). No GSAP or other animation library.
-- **Behavior:** Menu opens and closes. Panel links are presentation-only
-  (`disabled` buttons)—no client-side routing to section anchors yet.
-- **Header:** Fixed to the viewport; does not slide with the page surface.
+- **Primary menu:** Home, Introduction, Beliefs, Community, Stories, Begin —
+  each maps to a section id and scrolls smoothly (`scrollToSection` +
+  `scroll-behavior: smooth`). Off-home routes use `router.push('/#id')` with
+  `HashScroll` to complete the jump.
+- **Quick links:** Contact (`/contact`), Newsletter (`#newsletter`).
+- **Header:** Fixed to the viewport; brand returns home / scrolls to hero.
 
 ## Component responsibilities
 
 | File | Purpose | Consumers | Shared? |
 | --- | --- | --- | --- |
-| `SiteShell` | Chrome: provider, header, sliding page, nav panel | `page.tsx` | No |
-| `NavigationContext` | Nav open state, scroll lock, panel width, Escape | Shell, MenuButton, NavigationPanel | Yes — only global state |
+| `SiteShell` | Chrome: provider, header, sliding page, nav panel | `page.tsx`, `contact/page.tsx` | No |
+| `NavigationContext` | Nav open state, scroll lock, `scrollToSection` | Shell, MenuButton, NavigationPanel, Header | Yes — only global state |
+| `HashScroll` | Deep-link scroll after client navigation | SiteShell | No |
 | `Header` | Fixed top bar: brand + menu control | SiteShell | No |
 | `MenuButton` | Hamburger ↔ × (CSS morph) | Header | No |
-| `NavigationPanel` | Right drawer; presentation-only links | SiteShell | No |
-| `LoadingScreen` | Fullscreen load, then unmounts | `page.tsx` | No |
+| `NavigationPanel` | Right drawer; live section + route links | SiteShell | No |
+| `LoadingScreen` | Fullscreen load, then unmounts | `page.tsx` only | No |
 | `VideoBackground` | Fixed hero video, fade, handoff, pause/restart | HeroSection | No |
-| `SectionShell` | Full-viewport section frame + Container | Content sections except Hero | Yes |
-| `Container` | Max-width + gutters | SectionShell, HeroSection, Footer | Yes |
+| `SectionShell` | Section frame + Container; compact density option | Content sections | Yes |
+| `Container` | Max-width + gutters | SectionShell, Hero, Footer, contact | Yes |
 | `SectionLabel` | Uppercase kicker | SectionIntro | Yes (via intro) |
-| `Button` | Primary/secondary button | BeginSection only | Reusable primitive, 1 consumer today |
-| `Card` | Bordered surface | Available; sections use local article layouts | Reusable primitive |
-| `Footer` | Brand + copyright | `page.tsx` | No |
+| `Button` | Primary/secondary control | Newsletter, ContactForm | Reusable primitive |
+| `Card` | Bordered surface | Available | Reusable primitive |
+| `Footer` | Brand, copyright, Contact + Newsletter links | Home + contact | No |
 | `SectionIntro` | Label + h2 + description | Most content sections | Yes |
-| `data/menu.ts` | Static nav labels | NavigationPanel | Data |
+| `data/menu.ts` | Static nav labels + targets | NavigationPanel | Data |
 | `types/index.ts` | `MenuItem` | `data/menu.ts` | Types |
-
-**Critical path:** `layout`, `page`, `SiteShell`, nav stack, Hero +
-`VideoBackground`, the nine content sections after hero, `Footer`, `globals.css`.
-
-**Helpers (local blast radius):** `Container`, `SectionShell`, `SectionIntro`,
-`SectionLabel`, `Card`, `Button`, `HeroScrollHint`.
 
 ## Section composition
 
@@ -136,25 +139,27 @@ Stack order is fixed in `page.tsx` as a **guided philosophy journey**:
 
 | Order | File | Role | Section `id` |
 | --- | --- | --- | --- |
-| 01 | `HeroSection.tsx` | Identity declaration — opening philosophy line + video | `hero` |
+| 01 | `HeroSection.tsx` | Identity declaration | `hero` |
 | 02 | `IntroductionSection.tsx` | Founder intro + media placeholder | `introduction` |
-| 03 | `TurningPointSection.tsx` | Origin timeline (milestones) | `turning-point` |
+| 03 | `TurningPointSection.tsx` | Origin timeline | `turning-point` |
 | 04 | `BeliefsSection.tsx` | Core philosophy cards | `beliefs` |
 | 05 | `FrameworkSection.tsx` | Signature methodology pillars | `framework` |
-| 06 | `NotesSection.tsx` | Essays / reflections grid (placeholders) | `notes` |
-| 07 | `CommunitySection.tsx` | List / circle / events placeholders | `community` |
+| 06 | `NotesSection.tsx` | Essays / reflections grid | `notes` |
+| 07 | `CommunitySection.tsx` | Community doors | `community` |
 | 08 | `ExperiencesSection.tsx` | Programs, workshops, retreats | `experiences` |
-| 09 | `StoriesSection.tsx` | Testimonial / transformation placeholders | `stories` |
-| 10 | `BeginSection.tsx` | Minimal final invitation + CTA | `begin` |
+| 09 | `StoriesSection.tsx` | Transformation stories | `stories` |
+| 10 | `BeginSection.tsx` | Closing invitation | `begin` |
+| — | `NewsletterSection.tsx` | Email signup above footer | `newsletter` |
+
+Contact is **not** a homepage section; it lives at `/contact`.
 
 | Goal | Edit |
 | --- | --- |
 | One section’s copy or layout | Matching file under `sections/` |
 | Homepage order | Component order in `page.tsx` |
 | Add a section | New file under `sections/` + path import in `page.tsx` |
+| Nav labels / targets | `src/data/menu.ts` |
 
-Each `*Section.tsx` is a page *chapter*, not a deep module. Hero is split
-further (`VideoBackground`, `HeroScrollHint`) because of real client lifecycle.
 Hero keeps `id="hero"` so video and scroll-hint observers stay stable.
 
 ## Design tokens
@@ -170,15 +175,18 @@ Defined in `src/app/globals.css`:
 | `surface` | Soft fill |
 | `rounded-soft` | Shared corner radius |
 | `--ease-premium` / related durations | Shared motion easing |
+| `--header-offset` | `scroll-padding-top` for fixed header |
 
 Default container: wide max-width with responsive horizontal padding. Content
-sections use `SectionShell` (`min-h-svh`). Separation is spacing and composition.
+sections use `SectionShell` — content-led height on mobile, `md:min-h-svh` on
+larger screens. Separation is spacing and composition.
 
 ## Data / state flow
 
 ```text
 Static copy   → inlined in each *Section.tsx
-Menu labels   → data/menu.ts → NavigationPanel only
+Menu labels   → data/menu.ts → NavigationPanel
 UI state      → NavigationContext only
 Scroll FX     → local IntersectionObserver in VideoBackground & HeroScrollHint
+Forms         → local client state in NewsletterSection / ContactForm
 ```

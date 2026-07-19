@@ -53,8 +53,8 @@ component needs the **literal same** logic.
 - Keep presentational components free of data fetching and business logic.
 - Type props explicitly; avoid `any`.
 - Do not leave `console.log` or temporary debug UI in commits.
-- Menu destinations and CTAs may be presentational (`disabled` or non-navigating)
-  until real routing/forms exist.
+- Primary nav links scroll to homepage sections (or route to `/#id` off-home).
+  Forms may remain client-only (no backend) until a provider is chosen.
 - Prefer existing primitives (`Container`, `Card`, `SectionLabel`, `SectionShell`,
   `Button` when a true button is needed) when the pattern already matches.
 
@@ -112,10 +112,8 @@ component needs the **literal same** logic.
 
 ## Deferred cleanup
 
-- `Button.tsx` is a reusable primitive currently used only by `BeginSection`.
-  Leave it in place unless a deliberate code task inlines or reuses it. If a
-  second consumer never appears, inlining may be considered later—confirm that
-  `MenuButton`’s divergent styling stays intentional.
+- `Button.tsx` is a reusable primitive used by form sections (`NewsletterSection`,
+  `ContactForm`). Keep its API small; do not turn it into a general link component.
 
 ## Before merging
 

@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import HashScroll from "@/components/HashScroll";
 import Header from "@/components/Header";
 import NavigationPanel from "@/components/NavigationPanel";
 import NavigationProvider, {
@@ -28,14 +29,13 @@ function SiteShellInner({ children }: SiteShellProps) {
   };
 
   return (
-    <div className="relative min-h-svh overflow-hidden bg-background">
-      {/* Global header — fixed coordinates, never slides with the page */}
+    <div className="relative min-h-svh overflow-x-hidden bg-background">
+      <HashScroll />
       <Header />
 
-      {/* Homepage surface — slides left on the master timeline */}
       <div
         ref={pageRef}
-        className="relative z-10 min-h-svh overflow-hidden bg-background"
+        className="relative z-10 min-h-svh overflow-x-hidden bg-background"
         style={pageStyle}
       >
         {isOpen ? (
@@ -50,7 +50,6 @@ function SiteShellInner({ children }: SiteShellProps) {
         {children}
       </div>
 
-      {/* Menu surface — enters from the right, flush against the page */}
       <NavigationPanel />
     </div>
   );

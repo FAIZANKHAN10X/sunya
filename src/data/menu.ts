@@ -1,17 +1,13 @@
 import type { MenuItem } from "@/types";
 
-/** Primary nav labels — aligned to the storytelling page architecture. */
+/** Primary nav — homepage sections only (smooth-scroll targets). */
 export const menuItems: MenuItem[] = [
-  { id: "home", label: "Home" },
-  { id: "introduction", label: "Introduction" },
-  { id: "turning-point", label: "The Path" },
-  { id: "beliefs", label: "Beliefs" },
-  { id: "framework", label: "Framework" },
-  { id: "notes", label: "Notes" },
-  { id: "community", label: "Community" },
-  { id: "experiences", label: "Practice" },
-  { id: "stories", label: "Stories" },
-  { id: "begin", label: "Begin" },
+  { id: "home", label: "Home", sectionId: "hero" },
+  { id: "introduction", label: "Introduction", sectionId: "introduction" },
+  { id: "beliefs", label: "Beliefs", sectionId: "beliefs" },
+  { id: "community", label: "Community", sectionId: "community" },
+  { id: "stories", label: "Stories", sectionId: "stories" },
+  { id: "begin", label: "Begin", sectionId: "begin" },
 ];
 
 export const socialLinks: MenuItem[] = [
@@ -21,7 +17,6 @@ export const socialLinks: MenuItem[] = [
 ];
 
 export const quickLinks: MenuItem[] = [
-  { id: "notes", label: "Notes" },
-  { id: "events", label: "Events" },
-  { id: "experiences", label: "Experiences" },
+  { id: "contact", label: "Contact", href: "/contact" },
+  { id: "newsletter", label: "Newsletter", sectionId: "newsletter" },
 ];

@@ -27,7 +27,7 @@ const items = [
 export default function CommunitySection() {
   return (
     <SectionShell id="community" labelledBy="community-heading">
-      <div className="grid w-full gap-14 lg:grid-cols-12 lg:gap-16 xl:gap-20">
+      <div className="grid w-full gap-10 sm:gap-12 lg:grid-cols-12 lg:gap-16 xl:gap-20">
         <SectionIntro
           id="community-heading"
           label="Belonging"
@@ -40,7 +40,7 @@ export default function CommunitySection() {
         <ul className="divide-y divide-border border-y border-border lg:col-span-8">
           {items.map((item, index) => (
             <li key={item.title}>
-              <article className="group grid gap-4 py-8 transition-colors duration-300 sm:grid-cols-[auto_1fr_auto] sm:items-baseline sm:gap-8 sm:py-10 motion-reduce:transition-none">
+              <article className="group grid gap-3 py-7 transition-colors duration-300 sm:grid-cols-[auto_1fr_auto] sm:items-baseline sm:gap-8 sm:py-10 motion-reduce:transition-none">
                 <span
                   className="text-xs font-medium tracking-[0.18em] text-muted tabular-nums"
                   aria-hidden="true"

@@ -9,11 +9,11 @@ import SectionShell from "@/components/SectionShell";
 export default function IntroductionSection() {
   return (
     <SectionShell id="introduction" labelledBy="introduction-heading">
-      <div className="grid w-full gap-14 lg:grid-cols-12 lg:items-center lg:gap-16 xl:gap-24">
+      <div className="grid w-full gap-10 sm:gap-12 lg:grid-cols-12 lg:items-center lg:gap-16 xl:gap-24">
         {/* Media slot — replace with portrait or short film */}
-        <div className="relative lg:col-span-5">
+        <div className="relative mx-auto w-full max-w-md lg:col-span-5 lg:mx-0 lg:max-w-none">
           <div
-            className="pointer-events-none absolute -inset-3 rounded-[calc(var(--radius-soft)+0.5rem)] border border-border/60 sm:-inset-4"
+            className="pointer-events-none absolute -inset-2 rounded-[calc(var(--radius-soft)+0.35rem)] border border-border/60 sm:-inset-4 sm:rounded-[calc(var(--radius-soft)+0.5rem)]"
             aria-hidden="true"
           />
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-soft border border-border bg-surface">

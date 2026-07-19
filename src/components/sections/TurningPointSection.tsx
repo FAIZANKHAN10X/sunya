@@ -37,7 +37,7 @@ const milestones = [
 export default function TurningPointSection() {
   return (
     <SectionShell id="turning-point" labelledBy="turning-point-heading">
-      <div className="grid w-full gap-16 lg:grid-cols-12 lg:gap-20">
+      <div className="grid w-full gap-10 sm:gap-12 lg:grid-cols-12 lg:gap-20">
         <div className="lg:col-span-4 lg:sticky lg:top-28 lg:self-start">
           <SectionIntro
             id="turning-point-heading"

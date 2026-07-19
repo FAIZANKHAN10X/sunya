@@ -9,6 +9,7 @@
   --radius-soft: 0.75rem;
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-load: 700ms;
+  --header-offset: 4.5rem;
 }
 
 @theme inline {
@@ -24,12 +25,34 @@
 
 html {
   color-scheme: dark;
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-offset);
+  /* Prevent horizontal rubber-band / layout jump on mobile */
+  overflow-x: clip;
+  /* Smoother mobile scrolling */
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: clip;
+  /* Stabilize scrollbar gutters to reduce layout shift */
+  scrollbar-gutter: stable;
+}
+
+/* —— Focus rings (keyboard only feel via :focus-visible) —— */
+
+:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--foreground) 55%, transparent);
+  outline-offset: 3px;
 }
 
 /* —— Loading screen —— */

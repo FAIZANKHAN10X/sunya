@@ -52,10 +52,10 @@ export default function FrameworkSection() {
           </p>
         </div>
 
-        <ul className="mt-14 grid gap-px overflow-hidden rounded-soft border border-border bg-border sm:mt-16 sm:grid-cols-2 lg:grid-cols-5">
+        <ul className="mt-10 grid gap-px overflow-hidden rounded-soft border border-border bg-border sm:mt-14 sm:grid-cols-2 lg:mt-16 lg:grid-cols-5">
           {pillars.map((item, index) => (
             <li key={item.title} className="bg-background">
-              <article className="group flex h-full min-h-[16rem] flex-col bg-background p-6 transition-colors duration-300 hover:bg-surface sm:min-h-[18rem] sm:p-7 motion-reduce:transition-none lg:min-h-[22rem]">
+              <article className="group flex h-full min-h-0 flex-col bg-background p-5 transition-colors duration-300 hover:bg-surface sm:min-h-[18rem] sm:p-7 motion-reduce:transition-none lg:min-h-[22rem]">
                 <span
                   className="text-xs font-medium tracking-[0.18em] text-muted tabular-nums"
                   aria-hidden="true"

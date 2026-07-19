@@ -40,14 +40,14 @@ export default function StoriesSection() {
           descriptionClassName="max-w-xl"
         />
 
-        <ul className="mt-14 grid gap-4 sm:mt-16 lg:grid-cols-3">
+        <ul className="mt-10 grid gap-3 sm:mt-14 sm:gap-4 lg:mt-16 lg:grid-cols-3">
           {stories.map((item, index) => (
             <li
               key={item.quote}
               className={index === 0 ? "lg:col-span-1" : undefined}
             >
               <figure
-                className={`relative flex h-full flex-col rounded-soft border border-border p-7 sm:p-8 ${
+                className={`relative flex h-full flex-col rounded-soft border border-border p-6 sm:p-8 ${
                   index === 1
                     ? "bg-surface lg:mt-10"
                     : index === 2

@@ -30,12 +30,12 @@ export default function SectionIntro({
       </div>
       <h2
         id={id}
-        className={`mt-5 text-3xl font-medium tracking-tight text-foreground sm:text-4xl lg:text-[2.75rem] lg:leading-[1.12] xl:text-5xl ${headingClassName}`}
+        className={`mt-4 text-[1.75rem] font-medium leading-[1.15] tracking-tight text-foreground sm:mt-5 sm:text-4xl sm:leading-[1.12] lg:text-[2.75rem] xl:text-5xl ${headingClassName}`}
       >
         {heading}
       </h2>
       <p
-        className={`mt-6 text-base leading-relaxed text-muted sm:text-lg ${descriptionClassName}`}
+        className={`mt-4 text-sm leading-relaxed text-muted sm:mt-6 sm:text-lg ${descriptionClassName}`}
       >
         {description}
       </p>

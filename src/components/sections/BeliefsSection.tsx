@@ -46,7 +46,7 @@ export default function BeliefsSection() {
           descriptionClassName="max-w-xl"
         />
 
-        <ul className="mt-14 grid gap-3 sm:mt-16 sm:grid-cols-2 lg:grid-cols-6 lg:gap-4">
+        <ul className="mt-10 grid gap-3 sm:mt-14 sm:grid-cols-2 lg:mt-16 lg:grid-cols-6 lg:gap-4">
           {beliefs.map((item, index) => {
             const isFeatured = index === 0;
             return (
@@ -59,24 +59,24 @@ export default function BeliefsSection() {
                 }
               >
                 <article
-                  className={`group relative flex h-full flex-col overflow-hidden rounded-soft border border-border bg-surface/40 p-7 transition-[border-color,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-foreground/20 hover:bg-surface motion-reduce:transition-none sm:p-8 ${
+                  className={`group relative flex h-full flex-col overflow-hidden rounded-soft border border-border bg-surface/40 p-6 transition-[border-color,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-foreground/20 hover:bg-surface motion-reduce:transition-none sm:p-8 ${
                     isFeatured ? "lg:min-h-[22rem] lg:justify-between lg:p-10" : ""
                   }`}
                 >
                   <span
                     className={`font-medium tracking-[0.14em] text-muted/50 tabular-nums transition-colors duration-300 group-hover:text-muted ${
                       isFeatured
-                        ? "text-4xl sm:text-5xl lg:text-6xl"
+                        ? "text-3xl sm:text-5xl lg:text-6xl"
                         : "text-xs"
                     }`}
                     aria-hidden="true"
                   >
                     {String(index + 1).padStart(2, "0")}
                   </span>
-                  <div className={isFeatured ? "mt-auto pt-12 lg:pt-16" : "mt-8"}>
+                  <div className={isFeatured ? "mt-8 sm:mt-auto sm:pt-12 lg:pt-16" : "mt-6 sm:mt-8"}>
                     <h3
                       className={`font-medium tracking-tight text-foreground ${
-                        isFeatured ? "text-2xl sm:text-3xl" : "text-lg sm:text-xl"
+                        isFeatured ? "text-xl sm:text-3xl" : "text-lg sm:text-xl"
                       }`}
                     >
                       {item.title}
@@ -84,7 +84,7 @@ export default function BeliefsSection() {
                     <p
                       className={`mt-3 leading-relaxed text-muted ${
                         isFeatured
-                          ? "max-w-md text-base sm:text-lg"
+                          ? "max-w-md text-sm sm:text-lg"
                           : "text-sm sm:text-base"
                       }`}
                     >

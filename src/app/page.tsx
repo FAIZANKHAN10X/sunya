@@ -7,6 +7,7 @@ import ExperiencesSection from "@/components/sections/ExperiencesSection";
 import FrameworkSection from "@/components/sections/FrameworkSection";
 import HeroSection from "@/components/sections/HeroSection";
 import IntroductionSection from "@/components/sections/IntroductionSection";
+import NewsletterSection from "@/components/sections/NewsletterSection";
 import NotesSection from "@/components/sections/NotesSection";
 import StoriesSection from "@/components/sections/StoriesSection";
 import TurningPointSection from "@/components/sections/TurningPointSection";
@@ -14,7 +15,7 @@ import SiteShell from "@/components/SiteShell";
 
 /**
  * Homepage composition — a guided philosophy journey.
- * Section order is the narrative arc; edit content in each *Section file.
+ * Section order is the narrative arc; newsletter sits above the footer.
  */
 export default function Home() {
   return (
@@ -42,6 +43,8 @@ export default function Home() {
           <StoriesSection />
           {/* 10 Begin */}
           <BeginSection />
+          {/* Newsletter — above footer (not part of primary nav arc) */}
+          <NewsletterSection />
         </main>
         <Footer />
       </SiteShell>

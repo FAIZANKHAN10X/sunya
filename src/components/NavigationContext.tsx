@@ -16,6 +16,8 @@ type NavigationContextValue = {
   isOpen: boolean;
   toggle: () => void;
   close: () => void;
+  /** Close the menu (if open), then smoothly scroll to a homepage section. */
+  scrollToSection: (sectionId: string) => void;
   pageRef: RefObject<HTMLDivElement | null>;
   panelRef: RefObject<HTMLElement | null>;
   panelWidth: number;
@@ -23,11 +25,17 @@ type NavigationContextValue = {
 
 const NavigationContext = createContext<NavigationContextValue | null>(null);
 
-const DURATION = 1;
+/** Delay before scroll so the page surface can start closing without jank. */
+const SCROLL_AFTER_CLOSE_MS = 280;
 
 type NavigationProviderProps = {
   children: ReactNode;
 };
+
+function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
 
 export default function NavigationProvider({
   children,
@@ -35,6 +43,7 @@ export default function NavigationProvider({
   const [isOpen, setIsOpen] = useState(false);
   const [panelWidth, setPanelWidth] = useState(0);
   const isOpenRef = useRef(false);
+  const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const pageRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
@@ -58,16 +67,52 @@ export default function NavigationProvider({
     if (!isOpenRef.current) return;
     isOpenRef.current = false;
     setIsOpen(false);
-    const ms = DURATION * 1000;
-    window.setTimeout(() => {
-      if (!isOpenRef.current) lockScroll(false);
-    }, ms);
+    // Unlock immediately so in-page scroll and interaction feel instant.
+    lockScroll(false);
   }, [lockScroll]);
 
   const toggle = useCallback(() => {
     if (isOpenRef.current) close();
     else open();
   }, [close, open]);
+
+  const performScroll = useCallback((sectionId: string) => {
+    const el = document.getElementById(sectionId);
+    if (!el) return;
+
+    const behavior: ScrollBehavior = prefersReducedMotion() ? "auto" : "smooth";
+    el.scrollIntoView({ behavior, block: "start" });
+
+    // Keep URL hash in sync without an extra jump.
+    if (window.history.replaceState) {
+      window.history.replaceState(null, "", `#${sectionId}`);
+    }
+  }, []);
+
+  const scrollToSection = useCallback(
+    (sectionId: string) => {
+      if (scrollTimerRef.current !== null) {
+        clearTimeout(scrollTimerRef.current);
+        scrollTimerRef.current = null;
+      }
+
+      const wasOpen = isOpenRef.current;
+      if (wasOpen) close();
+
+      // Wait a beat if the menu was open so the transform does not fight scroll.
+      const delay = wasOpen && !prefersReducedMotion() ? SCROLL_AFTER_CLOSE_MS : 0;
+      if (delay === 0) {
+        performScroll(sectionId);
+        return;
+      }
+
+      scrollTimerRef.current = setTimeout(() => {
+        scrollTimerRef.current = null;
+        performScroll(sectionId);
+      }, delay);
+    },
+    [close, performScroll],
+  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -100,9 +145,26 @@ export default function NavigationProvider({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [close]);
 
+  useEffect(() => {
+    return () => {
+      if (scrollTimerRef.current !== null) clearTimeout(scrollTimerRef.current);
+      // Avoid leaving body locked if unmounted mid-open.
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   const value = useMemo(
-    () => ({ isOpen, toggle, close, pageRef, panelRef, panelWidth }),
-    [isOpen, toggle, close, panelWidth],
+    () => ({
+      isOpen,
+      toggle,
+      close,
+      scrollToSection,
+      pageRef,
+      panelRef,
+      panelWidth,
+    }),
+    [isOpen, toggle, close, scrollToSection, panelWidth],
   );
 
   return (

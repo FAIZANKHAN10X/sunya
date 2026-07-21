@@ -17,6 +17,10 @@ wheel scroll only). Analytics: **GTM + dataLayer** via `src/analytics/` (no
 direct GA4 `gtag` in app code). No GSAP, Framer Motion, state library,
 CSS-in-JS, UI kit, or CMS. No `src/hooks/` or `src/lib/`.
 
+Security: response headers (CSP + standard hardening) live in `next.config.ts`.
+Public env is validated in `src/env.ts`. Raw HTML injection is ESLint-banned
+except the GTM bootstrap in `GoogleTagManager.tsx`.
+
 ## Folder tree
 
 ```text
@@ -28,10 +32,11 @@ src
 │   ├── page.tsx         # homepage composition (narrative order)
 │   └── contact/
 │       └── page.tsx     # dedicated contact route
+├── env.ts                    # validated public env (NEXT_PUBLIC_* only)
 ├── analytics
 │   ├── track.ts              # dataLayer trackEvent + dedupe helpers
 │   ├── types.ts
-│   ├── GoogleTagManager.tsx
+│   ├── GoogleTagManager.tsx  # sole approved dangerouslySetInnerHTML (GTM)
 │   ├── PageViewTracker.tsx
 │   ├── SectionViewTracker.tsx
 │   ├── TrackedCtaLink.tsx

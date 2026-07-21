@@ -10,10 +10,13 @@
 ## Environment variables
 
 ```bash
-# .env.local
+# .env.local — public client only (never put secrets in NEXT_PUBLIC_*)
 NEXT_PUBLIC_GTM_ID=GTM-M9S5TG62
-NEXT_PUBLIC_GA4_MEASUREMENT_ID=G-6WRFGZP7LN
 ```
+
+- **Required in production** (`src/env.ts` throws if missing or malformed).
+- **Format:** `GTM-` + alphanumeric only — blocks script injection via the bootstrap snippet.
+- **GA4** (`G-6WRFGZP7LN`) is configured inside GTM only; the app does not read a GA4 env var.
 
 Restart the dev server after changing env vars.
 

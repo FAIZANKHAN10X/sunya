@@ -1,17 +1,37 @@
+import dynamic from "next/dynamic";
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
-import BeginSection from "@/components/sections/BeginSection";
-import BeliefsSection from "@/components/sections/BeliefsSection";
-import CommunitySection from "@/components/sections/CommunitySection";
-import ExperiencesSection from "@/components/sections/ExperiencesSection";
-import FrameworkSection from "@/components/sections/FrameworkSection";
 import HeroSection from "@/components/sections/HeroSection";
 import IntroductionSection from "@/components/sections/IntroductionSection";
-import MediaChapterSection from "@/components/sections/MediaChapterSection";
-import NewsletterSection from "@/components/sections/NewsletterSection";
-import NotesSection from "@/components/sections/NotesSection";
-import StoriesSection from "@/components/sections/StoriesSection";
 import SiteShell from "@/components/SiteShell";
+
+const MediaChapterSection = dynamic(
+  () => import("@/components/sections/MediaChapterSection"),
+);
+const BeliefsSection = dynamic(
+  () => import("@/components/sections/BeliefsSection"),
+);
+const FrameworkSection = dynamic(
+  () => import("@/components/sections/FrameworkSection"),
+);
+const NotesSection = dynamic(
+  () => import("@/components/sections/NotesSection"),
+);
+const CommunitySection = dynamic(
+  () => import("@/components/sections/CommunitySection"),
+);
+const ExperiencesSection = dynamic(
+  () => import("@/components/sections/ExperiencesSection"),
+);
+const StoriesSection = dynamic(
+  () => import("@/components/sections/StoriesSection"),
+);
+const BeginSection = dynamic(
+  () => import("@/components/sections/BeginSection"),
+);
+const NewsletterSection = dynamic(
+  () => import("@/components/sections/NewsletterSection"),
+);
 
 /**
  * Homepage — guided philosophy journey.

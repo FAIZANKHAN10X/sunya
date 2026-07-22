@@ -114,11 +114,21 @@ export default function VideoBackground({ src, poster }: VideoBackgroundProps) {
         className="absolute inset-0 h-full w-full object-cover object-center"
         src={src}
         poster={poster}
-        preload="metadata"
+        preload="auto"
         muted
         playsInline
         autoPlay
         loop
+        onCanPlay={() => {
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new CustomEvent("sunya:hero-media-ready"));
+          }
+        }}
+        onLoadedData={() => {
+          if (typeof window !== "undefined") {
+            window.dispatchEvent(new CustomEvent("sunya:hero-media-ready"));
+          }
+        }}
       />
       <div
         ref={overlayRef}

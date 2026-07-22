@@ -49,7 +49,31 @@ export default function LoadingScreen() {
             window.addEventListener("load", () => resolve(), { once: true });
           });
 
-    Promise.all([minElapsed, fontsReady, pageReady]).then(finish);
+    const heroMediaReady = new Promise<void>((resolve) => {
+      const checkVideo = () => {
+        const video = document.querySelector<HTMLVideoElement>("#hero video");
+        if (video && video.readyState >= 2) {
+          resolve();
+          return true;
+        }
+        return false;
+      };
+
+      if (checkVideo()) return;
+
+      const handleReady = () => {
+        resolve();
+        window.removeEventListener("sunya:hero-media-ready", handleReady);
+      };
+
+      window.addEventListener("sunya:hero-media-ready", handleReady);
+      // Safety cutoff so video buffering never stalls the loading gate on slow networks
+      window.setTimeout(resolve, 2000);
+    });
+
+    Promise.all([minElapsed, fontsReady, pageReady, heroMediaReady]).then(
+      finish,
+    );
 
     const safetyTimer = window.setTimeout(finish, SAFETY_TIMEOUT_MS);
 

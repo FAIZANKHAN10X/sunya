@@ -28,7 +28,8 @@ src
 ├── app
 │   ├── favicon.ico
 │   ├── globals.css      # tokens + loading / scroll-hint / menu-toggle CSS
-│   ├── layout.tsx       # root HTML, fonts, GTM, AnalyticsRoot, metadata
+│   ├── layout.tsx       # root HTML, fonts, GTM, AnalyticsRoot, metadata, JSON-LD
+│   ├── manifest.ts      # PWA web manifest
 │   ├── page.tsx         # homepage composition (narrative order)
 │   └── contact/
 │       └── page.tsx     # dedicated contact route

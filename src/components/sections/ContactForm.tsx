@@ -8,17 +8,25 @@ import Button from "@/components/Button";
  * Contact form for /contact — presentational until a backend is connected.
  */
 export default function ContactForm() {
-  const [status, setStatus] = useState<"idle" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setStatus("success");
-    event.currentTarget.reset();
-    trackGenerateLead({
-      lead_type: "contact",
-      form_id: "contact_page",
-      form_name: "Contact",
-    });
+    const formData = new FormData(event.currentTarget);
+    
+    // Honeypot spam check
+    if (formData.get("website")) return;
+
+    setStatus("submitting");
+
+    setTimeout(() => {
+      setStatus("success");
+      trackGenerateLead({
+        lead_type: "contact",
+        form_id: "contact_page",
+        form_name: "Contact",
+      });
+    }, 400);
   };
 
   if (status === "success") {
@@ -26,6 +34,7 @@ export default function ContactForm() {
       <div
         className="rounded-soft border border-border bg-surface px-6 py-10 sm:px-8"
         role="status"
+        aria-live="polite"
       >
         <p className="text-lg font-medium tracking-tight text-foreground">
           Message received.
@@ -49,6 +58,18 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+      {/* Honeypot field (hidden from real users, traps bots) */}
+      <div className="sr-only" aria-hidden="true">
+        <label htmlFor="contact-website">Website</label>
+        <input
+          id="contact-website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       <div>
         <label
           htmlFor="contact-name"
@@ -101,7 +122,9 @@ export default function ContactForm() {
         />
       </div>
       <div className="pt-2">
-        <Button type="submit">Send message</Button>
+        <Button type="submit" disabled={status === "submitting"}>
+          {status === "submitting" ? "Sending..." : "Send message"}
+        </Button>
       </div>
     </form>
   );

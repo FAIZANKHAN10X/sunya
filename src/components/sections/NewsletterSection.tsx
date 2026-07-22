@@ -10,18 +10,26 @@ import SectionShell from "@/components/SectionShell";
  */
 export default function NewsletterSection() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!email.trim()) return;
-    setStatus("success");
-    setEmail("");
-    trackGenerateLead({
-      lead_type: "newsletter",
-      form_id: "newsletter_homepage",
-      form_name: "Newsletter",
-    });
+
+    const formData = new FormData(event.currentTarget);
+    if (formData.get("website")) return;
+
+    setStatus("submitting");
+
+    setTimeout(() => {
+      setStatus("success");
+      setEmail("");
+      trackGenerateLead({
+        lead_type: "newsletter",
+        form_id: "newsletter_homepage",
+        form_name: "Newsletter",
+      });
+    }, 400);
   };
 
   return (
@@ -46,7 +54,7 @@ export default function NewsletterSection() {
 
           <div className="lg:col-span-7">
             {status === "success" ? (
-              <div role="status" className="border-l border-border pl-6">
+              <div role="status" aria-live="polite" className="border-l border-border pl-6">
                 <p className="text-base font-medium tracking-tight text-foreground sm:text-lg">
                   You’re on the list.
                 </p>
@@ -67,6 +75,18 @@ export default function NewsletterSection() {
                 className="flex flex-col gap-3 border-b border-border pb-1 sm:flex-row sm:items-end sm:gap-4"
                 noValidate
               >
+                {/* Honeypot field (hidden from real users, traps bots) */}
+                <div className="sr-only" aria-hidden="true">
+                  <label htmlFor="newsletter-website">Website</label>
+                  <input
+                    id="newsletter-website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
                 <div className="min-w-0 flex-1">
                   <label
                     htmlFor="newsletter-email"
@@ -87,8 +107,12 @@ export default function NewsletterSection() {
                     className="mt-2 min-h-12 w-full border-0 border-b border-transparent bg-transparent px-0 text-base text-foreground placeholder:text-muted/50 focus:border-foreground/30 focus:outline-none sm:min-h-11 sm:text-sm"
                   />
                 </div>
-                <Button type="submit" className="w-full shrink-0 sm:w-auto">
-                  Subscribe
+                <Button
+                  type="submit"
+                  disabled={status === "submitting"}
+                  className="w-full shrink-0 sm:w-auto"
+                >
+                  {status === "submitting" ? "Subscribing..." : "Subscribe"}
                 </Button>
               </form>
             )}

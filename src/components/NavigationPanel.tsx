@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useNavigation } from "@/components/NavigationContext";
 import { menuItems, quickLinks, socialLinks } from "@/data/menu";
@@ -16,11 +16,74 @@ export default function NavigationPanel() {
   const { isOpen, close, panelRef, scrollToSection } = useNavigation();
   const pathname = usePathname();
   const router = useRouter();
+  const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
 
   const panelStyle: React.CSSProperties = {
     transform: isOpen ? "translateX(0px)" : "translateX(100%)",
     transition: `transform ${NAV_DURATION}ms ${NAV_EASE}`,
   };
+
+  // Active section observer on homepage
+  useEffect(() => {
+    if (pathname !== "/") return;
+
+    const ids = menuItems
+      .map((item) => item.sectionId)
+      .filter((id): id is string => Boolean(id));
+
+    const elements = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (elements.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.find((entry) => entry.isIntersecting);
+        if (visible?.target.id) {
+          setActiveSectionId(visible.target.id);
+        }
+      },
+      { threshold: 0.25 },
+    );
+
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  // Focus trap inside panel while open
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const panel = panelRef.current;
+    if (!panel) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+
+      const focusables = Array.from(
+        panel.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href]:not([tabindex="-1"]), input:not([type="hidden"]), [tabindex="0"]',
+        ),
+      );
+
+      if (focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, panelRef]);
 
   const handleSectionNav = useCallback(
     (sectionId: string) => {
@@ -71,37 +134,48 @@ export default function NavigationPanel() {
 
           <nav aria-label="Primary" className="mt-6 sm:mt-8">
             <ul className="flex flex-col">
-              {menuItems.map((item, index) => (
-                <li
-                  key={item.id}
-                  className="nav-panel-item border-t border-border/80 last:border-b"
-                  style={
-                    isOpen
-                      ? {
-                          transitionDelay: `${80 + index * 45}ms`,
-                        }
-                      : undefined
-                  }
-                  data-open={isOpen ? "true" : "false"}
-                >
-                  <button
-                    type="button"
-                    tabIndex={isOpen ? 0 : -1}
-                    onClick={() => handleItem(item)}
-                    className="group flex w-full cursor-pointer items-baseline justify-between gap-4 py-4 text-left sm:py-5"
+              {menuItems.map((item, index) => {
+                const isActive = activeSectionId === item.sectionId;
+                return (
+                  <li
+                    key={item.id}
+                    className="nav-panel-item border-t border-border/80 last:border-b"
+                    style={
+                      isOpen
+                        ? {
+                            transitionDelay: `${80 + index * 45}ms`,
+                          }
+                        : undefined
+                    }
+                    data-open={isOpen ? "true" : "false"}
                   >
-                    <span className="text-2xl font-medium tracking-tight text-foreground transition-opacity duration-300 group-hover:opacity-60 motion-reduce:transition-none sm:text-3xl lg:text-[2.35rem]">
-                      {item.label}
-                    </span>
-                    <span
-                      className="text-[0.65rem] font-medium tracking-[0.16em] text-muted tabular-nums"
-                      aria-hidden="true"
+                    <button
+                      type="button"
+                      tabIndex={isOpen ? 0 : -1}
+                      onClick={() => handleItem(item)}
+                      className="group flex w-full cursor-pointer items-baseline justify-between gap-4 py-4 text-left sm:py-5"
                     >
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                  </button>
-                </li>
-              ))}
+                      <span
+                        className={`text-2xl font-medium tracking-tight transition-all duration-300 group-hover:opacity-100 motion-reduce:transition-none sm:text-3xl lg:text-[2.35rem] ${
+                          isActive
+                            ? "text-foreground opacity-100 underline decoration-muted/40 underline-offset-8"
+                            : "text-foreground/80 opacity-70 group-hover:text-foreground"
+                        }`}
+                      >
+                        {item.label}
+                      </span>
+                      <span
+                        className={`text-[0.65rem] font-medium tracking-[0.16em] tabular-nums ${
+                          isActive ? "text-foreground" : "text-muted"
+                        }`}
+                        aria-hidden="true"
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
         </div>
@@ -162,3 +236,4 @@ export default function NavigationPanel() {
     </aside>
   );
 }
+
